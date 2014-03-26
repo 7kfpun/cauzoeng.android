@@ -8,17 +8,6 @@
         android:id="@+id/textViewItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="Item name here..."
-        android:textSize="15dp">
-   	</TextView>
+        android:layout_alignParentTop="true" />
 
-    <TextView 
-   		android:id="@+id/subTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="Item name here..."
-        android:textSize="15dp">
-   	</TextView>
 </RelativeLayout>

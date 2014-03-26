@@ -1,8 +1,13 @@
 package com.cauzoeng.android;
 
+import java.util.Date;
 import java.util.Locale;
 
 import com.cauzoeng.android.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +23,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import android.util.Log;
-
+import android.view.View.OnClickListener;
 
 public class MainActivity extends FragmentActivity {
 
@@ -44,7 +50,10 @@ public class MainActivity extends FragmentActivity {
 	/**
 	 * constant
 	 */
-	private static final String FRAGMENT_TAG = "FRAGMENT";
+	private static final String FRAGMENT_TAG = "FRAGMENT LOG";
+	private static final String EVENT_TAG = "EVENT LOG";
+	
+	private static final int NUMBER_OF_PAGES = 4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +96,28 @@ public class MainActivity extends FragmentActivity {
 
 			switch (position) {
 			case 0:
-				Log.d(FRAGMENT_TAG, "First fragment.");
+				Log.d(FRAGMENT_TAG, "First fragment..(home)");
+				Fragment fragment_0 = new HomeSectionFragment();
+				Bundle args_0 = new Bundle();
+				args_0.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment_0.setArguments(args_0);
+				return fragment_0;
+
+			case 1:
+				Log.d(FRAGMENT_TAG, "Second fragment..(previous)");
 				Fragment fragment_1 = new PreviousSectionFragment();
 				Bundle args_1 = new Bundle();
 				args_1.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
 				fragment_1.setArguments(args_1);
 				return fragment_1;
+
+			case 2:
+				Log.d(FRAGMENT_TAG, "Third fragment..(helps)");
+				Fragment fragment_2 = new HelpsSectionFragment();
+				Bundle args_2 = new Bundle();
+				args_2.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment_2.setArguments(args_2);
+				return fragment_2;
 
 			default:
 				Log.d(FRAGMENT_TAG, "Default fragment.");
@@ -106,8 +131,8 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
-			return 3;
+			// Show total pages.
+			return NUMBER_OF_PAGES;
 		}
 
 		@Override
@@ -120,8 +145,42 @@ public class MainActivity extends FragmentActivity {
 				return getString(R.string.title_section2).toUpperCase(l);
 			case 2:
 				return getString(R.string.title_section3).toUpperCase(l);
+			case 3:
+				return getString(R.string.title_section4).toUpperCase(l);
 			}
 			return null;
+		}
+	}
+
+	public static class HomeSectionFragment extends Fragment {
+		/**
+		 * Previous fragment control
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+
+		public HomeSectionFragment() {
+		}
+		
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main_0_home,
+					container, false);
+			TextView dummyTextView = (TextView) rootView
+					.findViewById(R.id.section_label);
+			dummyTextView.setText("Home section.............");
+			
+			Button clickButton = (Button) rootView.findViewById(R.id.button1);
+
+			clickButton.setOnClickListener( new OnClickListener() {
+
+	            @Override
+	            public void onClick(View v) {
+	                Log.i(EVENT_TAG, "Click!!");
+	            }
+	        });
+			
+			return rootView;
 		}
 	}
 
@@ -137,7 +196,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_2_previous,
+			View rootView = inflater.inflate(R.layout.fragment_main_1_previous,
 					container, false);
 			
 			ListView listView = (ListView) rootView.findViewById(R.id.listView1);
@@ -148,13 +207,48 @@ public class MainActivity extends FragmentActivity {
 
             for(int i = 0; i < values.length; i++)
                 values[i] = "Lucky draw #" + i;
-            
+
+            try {
+                JSONObject obj = new JSONObject();
+
+                for(int i = 0; i < 40; i++) {
+	            	obj.put("name", "Lucky draw" + i);
+	            	obj.put("age", new Integer(100) + i);
+                }
+
+            } catch (JSONException e) {
+                Log.e("JSON Parser", "Error parsing data " + e.toString());
+            }
+
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(
             	getActivity(), R.layout.listview_row_items, R.id.textViewItem, values);
 
             // Assign adapter to ListView
             listView.setAdapter(adapter); 
             return rootView;
+		}
+	}
+
+	
+	public static class HelpsSectionFragment extends Fragment {
+		/**
+		 * Helps fragment control
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+
+		public HelpsSectionFragment() {
+		}
+		
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main_2_helps,
+					container, false);
+			TextView dummyTextView = (TextView) rootView
+					.findViewById(R.id.section_label);
+			dummyTextView.setText("Help section.............");
+			
+			return rootView;
 		}
 	}
 	/**
