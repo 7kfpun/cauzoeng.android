@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -246,8 +248,11 @@ public class MainActivity extends FragmentActivity {
 					container, false);
 			TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
-			dummyTextView.setText("Help section.............");
-			
+
+
+			WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+			dummyTextView.setText("Help section.............: " + wm.getConnectionInfo().getMacAddress());
+
 			return rootView;
 		}
 	}
