@@ -17,7 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import android.util.Log;
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -35,6 +40,11 @@ public class MainActivity extends FragmentActivity {
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+	
+	/**
+	 * constant
+	 */
+	private static final String FRAGMENT_TAG = "FRAGMENT";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +84,24 @@ public class MainActivity extends FragmentActivity {
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
-			Fragment fragment = new DummySectionFragment();
-			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-			fragment.setArguments(args);
-			return fragment;
+
+			switch (position) {
+			case 0:
+				Log.d(FRAGMENT_TAG, "First fragment.");
+				Fragment fragment_1 = new PreviousSectionFragment();
+				Bundle args_1 = new Bundle();
+				args_1.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment_1.setArguments(args_1);
+				return fragment_1;
+
+			default:
+				Log.d(FRAGMENT_TAG, "Default fragment.");
+				Fragment fragment = new DummySectionFragment();
+				Bundle args = new Bundle();
+				args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment.setArguments(args);
+				return fragment;
+			}
 		}
 
 		@Override
@@ -102,6 +125,38 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	public static class PreviousSectionFragment extends Fragment {
+		/**
+		 * Previous fragment control
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+
+		public PreviousSectionFragment() {
+		}
+		
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main_2_previous,
+					container, false);
+			
+			ListView listView = (ListView) rootView.findViewById(R.id.listView1);
+            
+            // Defined Array values to show in ListView
+			
+            String[] values = new String[20];
+
+            for(int i = 0; i < values.length; i++)
+                values[i] = "Lucky draw #" + i;
+            
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+            	getActivity(), R.layout.listview_row_items, R.id.textViewItem, values);
+
+            // Assign adapter to ListView
+            listView.setAdapter(adapter); 
+            return rootView;
+		}
+	}
 	/**
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
