@@ -1,6 +1,7 @@
 package com.cauzoeng.android;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import com.cauzoeng.android.R;
@@ -173,19 +174,39 @@ public class MainActivity extends FragmentActivity {
 			TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
 			dummyTextView.setText("Home section.............");
-			
-			Button clickButton = (Button) rootView.findViewById(R.id.button1);
 
-			clickButton.setOnClickListener( new OnClickListener() {
+			Button clickGetButton = (Button) rootView.findViewById(R.id.button1);
+			Button clickPostButton = (Button) rootView.findViewById(R.id.button2);
+
+			clickGetButton.setOnClickListener( new OnClickListener() {
 
 	            @Override
 	            public void onClick(View v) {
-	                Log.i(EVENT_TAG, "Click!!");
+	                Log.i(EVENT_TAG, "Click get!!");
 	                AsyncHttpClient client = new AsyncHttpClient();
 	                client.get("http://httpbin.org/get", new AsyncHttpResponseHandler() {
 	                    @Override
 	                    public void onSuccess(String response) {
 	                    	Log.i(EVENT_TAG, "Get http" + response);
+	                    }
+	                });
+	            }
+	        });
+			
+			clickPostButton.setOnClickListener( new OnClickListener() {
+
+	            @Override
+	            public void onClick(View v) {
+	                Log.i(EVENT_TAG, "Click post!!");
+	                HashMap<String, String> paramMap = new HashMap<String, String>();
+	                paramMap.put("key", "value");
+	                RequestParams params = new RequestParams(paramMap);
+	                
+	                AsyncHttpClient client = new AsyncHttpClient();
+	                client.post("http://httpbin.org/post", params, new AsyncHttpResponseHandler() {
+	                    @Override
+	                    public void onSuccess(String response) {
+	                    	Log.i(EVENT_TAG, "Post http" + response);
 	                    }
 	                });
 	            }
