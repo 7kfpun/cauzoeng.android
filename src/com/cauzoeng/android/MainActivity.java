@@ -32,6 +32,8 @@ import android.widget.TextView;
 import android.util.Log;
 import android.view.View.OnClickListener;
 
+import com.loopj.android.http.*;
+
 public class MainActivity extends FragmentActivity {
 
 	/**
@@ -179,6 +181,13 @@ public class MainActivity extends FragmentActivity {
 	            @Override
 	            public void onClick(View v) {
 	                Log.i(EVENT_TAG, "Click!!");
+	                AsyncHttpClient client = new AsyncHttpClient();
+	                client.get("http://httpbin.org/get", new AsyncHttpResponseHandler() {
+	                    @Override
+	                    public void onSuccess(String response) {
+	                    	Log.i(EVENT_TAG, "Get http" + response);
+	                    }
+	                });
 	            }
 	        });
 			
