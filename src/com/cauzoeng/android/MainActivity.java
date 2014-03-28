@@ -38,29 +38,31 @@ import android.view.View.OnClickListener;
 
 import com.loopj.android.http.*;
 
+/**
+ * MainActivity.
+ */
 public class MainActivity extends FragmentActivity {
 
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
+     * will keep every loaded fragment in memory. If this becomes too memory
+     * intensive, it may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
 	SectionsPagerAdapter mSectionsPagerAdapter;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-	
+
 	/**
-	 * constant
+	 * constant.
 	 */
 	private static final String FRAGMENT_TAG = "FRAGMENT LOG";
 	private static final String EVENT_TAG = "EVENT LOG";
-	
 	private static final int NUMBER_OF_PAGES = 4;
 
 	@Override
@@ -160,15 +162,15 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+    /**
+     * Home section fragment control.
+     */
 	public static class HomeSectionFragment extends Fragment {
-		/**
-		 * Previous fragment control
-		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		public HomeSectionFragment() {
 		}
-		
+
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -195,7 +197,7 @@ public class MainActivity extends FragmentActivity {
 	                });
 	            }
 	        });
-			
+
 			clickPostButton.setOnClickListener( new OnClickListener() {
 
 	            @Override
@@ -204,7 +206,7 @@ public class MainActivity extends FragmentActivity {
 	                HashMap<String, String> paramMap = new HashMap<String, String>();
 	                paramMap.put("key", "value");
 	                RequestParams params = new RequestParams(paramMap);
-	                
+
 	                AsyncHttpClient client = new AsyncHttpClient();
 	                client.post("http://httpbin.org/post", params, new AsyncHttpResponseHandler() {
 	                    @Override
@@ -214,30 +216,28 @@ public class MainActivity extends FragmentActivity {
 	                });
 	            }
 	        });
-			
+
 			return rootView;
 		}
 	}
 
+    /**
+     * Previous section fragment control.
+     */
 	public static class PreviousSectionFragment extends Fragment {
-		/**
-		 * Previous fragment control
-		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		public PreviousSectionFragment() {
 		}
-		
+
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main_1_previous,
 					container, false);
-			
 			ListView listView = (ListView) rootView.findViewById(R.id.listView1);
-            
+
             // Defined Array values to show in ListView
-			
             String[] values = new String[20];
 
             for(int i = 0; i < values.length; i++)
@@ -264,16 +264,15 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	
+    /**
+     * Helps fragment control.
+     */
 	public static class HelpsSectionFragment extends Fragment {
-		/**
-		 * Helps fragment control
-		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		public HelpsSectionFragment() {
 		}
-		
+
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -282,24 +281,23 @@ public class MainActivity extends FragmentActivity {
 			TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
 
-
 			WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
 			dummyTextView.setText("Help section.............: " + wm.getConnectionInfo().getMacAddress());
 
 			final Button clickPopupButton = (Button) rootView.findViewById(R.id.button1);
-			
+
 			clickPopupButton.setOnClickListener( new OnClickListener() {
 
 	            @Override
 	            public void onClick(View v) {
 	            	Log.i(EVENT_TAG, "click open popup http");
-	            	
+
 	            	View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
 	            	final PopupWindow mpopup = new PopupWindow(
 	            		popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-	                mpopup.setAnimationStyle(android.R.style.Animation_Dialog);   
+	                mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
 	                mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
-	                
+
 	                WebViewClient myWebClient = new WebViewClient()
 	                {
 	                	@Override
@@ -313,41 +311,39 @@ public class MainActivity extends FragmentActivity {
 	                		return true;
 	                    }
 	                };
-	                
+
 	                try {
 		                WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
 		        		webView.getSettings().setJavaScriptEnabled(true);
 		        		webView.setWebViewClient(myWebClient);
 		        		webView.loadUrl("http://www.google.com");
-		        		
+
 	                } catch (Exception e) {
 	                    Log.e(EVENT_TAG, "Web open " + e.toString());
 	                }
 
 	                Button btnOk = (Button)popUpView.findViewById(R.id.button1);
 	                btnOk.setOnClickListener(new OnClickListener() 
-	                {                    
+	                {
 	                    @Override
-	                    public void onClick(View v) 
-	                    {
+	                    public void onClick(View v) {
 	    	            	Log.i(EVENT_TAG, "click ok popup http");
 	                        mpopup.dismiss();
 	                    }
 	                });
-	                
+
 	                Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
 	                btnCancel.setOnClickListener(new OnClickListener() 
-	                {                    
+	                {
 	                    @Override
-	                    public void onClick(View v) 
-	                    {
+	                    public void onClick(View v) {
 	    	            	Log.i(EVENT_TAG, "click cancel popup http");
 	                        mpopup.dismiss();
 	                    }
 	                });
 	            };
 			});
-			
+
 			return rootView;
 		}
 	}
@@ -377,5 +373,4 @@ public class MainActivity extends FragmentActivity {
 			return rootView;
 		}
 	}
-
 }
