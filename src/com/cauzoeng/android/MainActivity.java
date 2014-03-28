@@ -1,6 +1,5 @@
 package com.cauzoeng.android;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -10,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -25,9 +25,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import android.util.Log;
@@ -283,6 +286,68 @@ public class MainActivity extends FragmentActivity {
 			WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
 			dummyTextView.setText("Help section.............: " + wm.getConnectionInfo().getMacAddress());
 
+			final Button clickPopupButton = (Button) rootView.findViewById(R.id.button1);
+			
+			clickPopupButton.setOnClickListener( new OnClickListener() {
+
+	            @Override
+	            public void onClick(View v) {
+	            	Log.i(EVENT_TAG, "click open popup http");
+	            	
+	            	View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
+	            	final PopupWindow mpopup = new PopupWindow(
+	            		popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+	                mpopup.setAnimationStyle(android.R.style.Animation_Dialog);   
+	                mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
+	                
+	                WebViewClient myWebClient = new WebViewClient()
+	                {
+	                	@Override
+	                	public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+	                	{
+	                		// This line we let me load only pages inside "com" Webpage
+	                		if ( url.contains("com") == true )
+	                            //Load new URL Don't override URL Link
+	                			return false;
+
+	                		return true;
+	                    }
+	                };
+	                
+	                try {
+		                WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
+		        		webView.getSettings().setJavaScriptEnabled(true);
+		        		webView.setWebViewClient(myWebClient);
+		        		webView.loadUrl("http://www.google.com");
+		        		
+	                } catch (Exception e) {
+	                    Log.e(EVENT_TAG, "Web open " + e.toString());
+	                }
+
+	                Button btnOk = (Button)popUpView.findViewById(R.id.button1);
+	                btnOk.setOnClickListener(new OnClickListener() 
+	                {                    
+	                    @Override
+	                    public void onClick(View v) 
+	                    {
+	    	            	Log.i(EVENT_TAG, "click ok popup http");
+	                        mpopup.dismiss();
+	                    }
+	                });
+	                
+	                Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
+	                btnCancel.setOnClickListener(new OnClickListener() 
+	                {                    
+	                    @Override
+	                    public void onClick(View v) 
+	                    {
+	    	            	Log.i(EVENT_TAG, "click cancel popup http");
+	                        mpopup.dismiss();
+	                    }
+	                });
+	            };
+			});
+			
 			return rootView;
 		}
 	}
