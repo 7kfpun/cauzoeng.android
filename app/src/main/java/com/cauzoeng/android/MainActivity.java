@@ -1,6 +1,9 @@
 package com.cauzoeng.android;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 
 import com.cauzoeng.android.R;
@@ -28,15 +31,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.graphics.drawable.BitmapDrawable;
 
 import android.util.Log;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.loopj.android.http.*;
 
@@ -318,6 +326,56 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+    /**
+     * Help section fragment control.
+     */
+    public static class AboutSectionFragment extends Fragment {
+        public static final String ARG_SECTION_NUMBER = "section_number";
+
+        public AboutSectionFragment() {
+        }
+
+        String[] web = {
+                "Google Plus",
+                "Twitter",
+                "Windows",
+                "Bing",
+                "Itunes",
+                "Wordpress",
+                "Drupal"
+        };
+
+        Integer[] imageId = {
+                R.drawable.ic_launcher,
+                R.drawable.ic_launcher,
+                R.drawable.ic_launcher,
+                R.drawable.ic_launcher,
+                R.drawable.ic_launcher,
+                R.drawable.ic_launcher,
+                R.drawable.ic_launcher
+        };
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_3_about,
+                    container, false);
+
+            CustomList adapter = new CustomList(getActivity(), web, imageId);
+            ListView list=(ListView) rootView.findViewById(R.id.list);
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    Toast.makeText(getActivity(), "You Clicked at " + web[+position], Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return rootView;
+        }
+    }
+
 	/**
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
@@ -385,6 +443,14 @@ public class MainActivity extends FragmentActivity {
 				args_2.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
 				fragment_2.setArguments(args_2);
 				return fragment_2;
+
+            case 3:
+                Log.d(FRAGMENT_TAG, "Third fragment..(helps)");
+                Fragment fragment_3 = new AboutSectionFragment();
+                Bundle args_3 = new Bundle();
+                args_3.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+                fragment_3.setArguments(args_3);
+                return fragment_3;
 
 			default:
 				Log.d(FRAGMENT_TAG, "Default fragment.");
