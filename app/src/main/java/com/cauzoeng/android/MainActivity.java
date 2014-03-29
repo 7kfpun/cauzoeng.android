@@ -315,6 +315,8 @@ public class MainActivity extends FragmentActivity {
 	                try {
 		                WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
 		        		webView.getSettings().setJavaScriptEnabled(true);
+                        webView.getSettings().setBuiltInZoomControls(true);
+                        webView.getSettings().setSupportZoom(true);
 		        		webView.setWebViewClient(myWebClient);
 		        		webView.loadUrl("http://www.google.com");
 
