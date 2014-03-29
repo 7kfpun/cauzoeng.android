@@ -4,7 +4,9 @@
 # built application files
 *.apk
 *.ap_
-# *.jar -- for AIDE to get libraries
+*.jar
+
+!libs/ -- uploading libs for AIDE
 
 # lint folder
 lint
@@ -52,3 +54,4 @@ Thumbs.db
 # gradle directory
 .gradle
 build/
+gradle/
