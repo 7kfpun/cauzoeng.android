@@ -20,6 +20,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.graphics.drawable.BitmapDrawable;
 
 import android.util.Log;
 import android.view.View.OnClickListener;
@@ -43,6 +45,12 @@ import com.loopj.android.http.*;
  */
 public class MainActivity extends FragmentActivity {
 
+	/**
+	 * constant.
+	 */
+	private static final String FRAGMENT_TAG = "FRAGMENT LOG";
+	private static final String EVENT_TAG = "EVENT LOG";
+	private static final int NUMBER_OF_PAGES = 4;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -52,18 +60,10 @@ public class MainActivity extends FragmentActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-
-	/**
-	 * constant.
-	 */
-	private static final String FRAGMENT_TAG = "FRAGMENT LOG";
-	private static final String EVENT_TAG = "EVENT LOG";
-	private static final int NUMBER_OF_PAGES = 4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,80 +86,6 @@ public class MainActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
-	}
-
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the sections/tabs/pages.
-	 */
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-		public SectionsPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
-
-			switch (position) {
-			case 0:
-				Log.d(FRAGMENT_TAG, "First fragment..(home)");
-				Fragment fragment_0 = new HomeSectionFragment();
-				Bundle args_0 = new Bundle();
-				args_0.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-				fragment_0.setArguments(args_0);
-				return fragment_0;
-
-			case 1:
-				Log.d(FRAGMENT_TAG, "Second fragment..(previous)");
-				Fragment fragment_1 = new PreviousSectionFragment();
-				Bundle args_1 = new Bundle();
-				args_1.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-				fragment_1.setArguments(args_1);
-				return fragment_1;
-
-			case 2:
-				Log.d(FRAGMENT_TAG, "Third fragment..(helps)");
-				Fragment fragment_2 = new HelpsSectionFragment();
-				Bundle args_2 = new Bundle();
-				args_2.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-				fragment_2.setArguments(args_2);
-				return fragment_2;
-
-			default:
-				Log.d(FRAGMENT_TAG, "Default fragment.");
-				Fragment fragment = new DummySectionFragment();
-				Bundle args = new Bundle();
-				args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-				fragment.setArguments(args);
-				return fragment;
-			}
-		}
-
-		@Override
-		public int getCount() {
-			// Show total pages.
-			return NUMBER_OF_PAGES;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			Locale l = Locale.getDefault();
-			switch (position) {
-			case 0:
-				return getString(R.string.title_section1).toUpperCase(l);
-			case 1:
-				return getString(R.string.title_section2).toUpperCase(l);
-			case 2:
-				return getString(R.string.title_section3).toUpperCase(l);
-			case 3:
-				return getString(R.string.title_section4).toUpperCase(l);
-			}
-			return null;
-		}
 	}
 
     /**
@@ -259,7 +185,7 @@ public class MainActivity extends FragmentActivity {
             	getActivity(), R.layout.listview_row_items, R.id.textViewItem, values);
 
             // Assign adapter to ListView
-            listView.setAdapter(adapter); 
+            listView.setAdapter(adapter);
             return rootView;
 		}
 	}
@@ -325,7 +251,7 @@ public class MainActivity extends FragmentActivity {
 	                }
 
 	                Button btnOk = (Button)popUpView.findViewById(R.id.button1);
-	                btnOk.setOnClickListener(new OnClickListener() 
+	                btnOk.setOnClickListener(new OnClickListener()
 	                {
 	                    @Override
 	                    public void onClick(View v) {
@@ -335,7 +261,7 @@ public class MainActivity extends FragmentActivity {
 	                });
 
 	                Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
-	                btnCancel.setOnClickListener(new OnClickListener() 
+	                btnCancel.setOnClickListener(new OnClickListener()
 	                {
 	                    @Override
 	                    public void onClick(View v) {
@@ -346,9 +272,52 @@ public class MainActivity extends FragmentActivity {
 	            };
 			});
 
+            final Button clickPopupFormButton = (Button) rootView.findViewById(R.id.button2);
+
+            clickPopupFormButton.setOnClickListener( new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Log.i(EVENT_TAG, "click open popup http");
+
+                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup_form, null);
+                    final PopupWindow mpopup = new PopupWindow(
+                            popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+                    mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
+                    mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
+
+                    WebViewClient myWebClient = new WebViewClient()
+                    {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+                        {
+                            // This line we let me load only pages inside "com" Webpage
+                            if ( url.contains("com") == true )
+                                //Load new URL Don't override URL Link
+                                return false;
+
+                            return true;
+                        }
+                    };
+
+                    try {
+                        WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
+                        webView.getSettings().setJavaScriptEnabled(true);
+                        webView.getSettings().setBuiltInZoomControls(true);
+                        webView.getSettings().setSupportZoom(true);
+                        webView.setWebViewClient(myWebClient);
+                        webView.loadUrl("http://hk.yahoo.com/");
+
+                    } catch (Exception e) {
+                        Log.e(EVENT_TAG, "Web open " + e.toString());
+                    }
+                };
+            });
+
 			return rootView;
 		}
 	}
+
 	/**
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
@@ -373,6 +342,80 @@ public class MainActivity extends FragmentActivity {
 			dummyTextView.setText(Integer.toString(getArguments().getInt(
 					ARG_SECTION_NUMBER)));
 			return rootView;
+		}
+	}
+
+	/**
+	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+	 * one of the sections/tabs/pages.
+	 */
+	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+		public SectionsPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			// getItem is called to instantiate the fragment for the given page.
+			// Return a DummySectionFragment (defined as a static inner class
+			// below) with the page number as its lone argument.
+
+			switch (position) {
+			case 0:
+				Log.d(FRAGMENT_TAG, "First fragment..(home)");
+				Fragment fragment_0 = new HomeSectionFragment();
+				Bundle args_0 = new Bundle();
+				args_0.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment_0.setArguments(args_0);
+				return fragment_0;
+
+			case 1:
+				Log.d(FRAGMENT_TAG, "Second fragment..(previous)");
+				Fragment fragment_1 = new PreviousSectionFragment();
+				Bundle args_1 = new Bundle();
+				args_1.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment_1.setArguments(args_1);
+				return fragment_1;
+
+			case 2:
+				Log.d(FRAGMENT_TAG, "Third fragment..(helps)");
+				Fragment fragment_2 = new HelpsSectionFragment();
+				Bundle args_2 = new Bundle();
+				args_2.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment_2.setArguments(args_2);
+				return fragment_2;
+
+			default:
+				Log.d(FRAGMENT_TAG, "Default fragment.");
+				Fragment fragment = new DummySectionFragment();
+				Bundle args = new Bundle();
+				args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+				fragment.setArguments(args);
+				return fragment;
+			}
+		}
+
+		@Override
+		public int getCount() {
+			// Show total pages.
+			return NUMBER_OF_PAGES;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			Locale l = Locale.getDefault();
+			switch (position) {
+			case 0:
+				return getString(R.string.title_section1).toUpperCase(l);
+			case 1:
+				return getString(R.string.title_section2).toUpperCase(l);
+			case 2:
+				return getString(R.string.title_section3).toUpperCase(l);
+			case 3:
+				return getString(R.string.title_section4).toUpperCase(l);
+			}
+			return null;
 		}
 	}
 }
