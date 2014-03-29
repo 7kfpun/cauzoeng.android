@@ -1,8 +1,12 @@
 package com.cauzoeng.android;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -164,34 +168,17 @@ public class MainActivity extends FragmentActivity {
             for(int i = 0; i < values.length; i++)
                 values[i] = "Lucky draw #" + i;
 
-            try {
-                JSONObject obj = new JSONObject();
-
-                for(int i = 0; i < 40; i++) {
-	            	obj.put("name", "Lucky draw" + i);
-	            	obj.put("age", new Integer(100) + i);
-                }
-
-            } catch (JSONException e) {
-                Log.e("JSON Parser", "Error parsing data " + e.toString());
-            }
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-            	getActivity(), R.layout.listview_row_item, R.id.textViewItem, values);
-
-            // Assign adapter to ListView
-            listView.setAdapter(adapter);
             return rootView;
 		}
 	}
 
     /**
-     * Helps fragment control.
+     * Help fragment control.
      */
-	public static class HelpsSectionFragment extends Fragment {
+	public static class HelpSectionFragment extends Fragment {
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
-		public HelpsSectionFragment() {
+		public HelpSectionFragment() {
 		}
 
 		@Override
@@ -435,7 +422,7 @@ public class MainActivity extends FragmentActivity {
 
 			case 2:
 				Log.d(FRAGMENT_TAG, "Third fragment..(helps)");
-				Fragment fragment_2 = new HelpsSectionFragment();
+				Fragment fragment_2 = new HelpSectionFragment();
 				Bundle args_2 = new Bundle();
 				args_2.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
 				fragment_2.setArguments(args_2);
