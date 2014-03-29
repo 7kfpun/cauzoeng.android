@@ -1,14 +1,8 @@
 package com.cauzoeng.android;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 
-import com.cauzoeng.android.R;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,27 +14,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.graphics.drawable.BitmapDrawable;
 
 import android.util.Log;
 import android.view.View.OnClickListener;
@@ -190,7 +177,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-            	getActivity(), R.layout.listview_row_items, R.id.textViewItem, values);
+            	getActivity(), R.layout.listview_row_item, R.id.textViewItem, values);
 
             // Assign adapter to ListView
             listView.setAdapter(adapter);
@@ -345,6 +332,16 @@ public class MainActivity extends FragmentActivity {
                 "Drupal"
         };
 
+        String[] description = {
+                "Google PlusGoogle PlusGoogle PlusGoogle Plus",
+                "TwitterTwitterTwitterTwitterTwitter",
+                "WindowsWindowsWindowsWindowsWindowsWindows",
+                "Bing",
+                "Itunes",
+                "Wordpress",
+                "Drupal"
+        };
+
         Integer[] imageId = {
                 R.drawable.ic_launcher,
                 R.drawable.ic_launcher,
@@ -361,13 +358,13 @@ public class MainActivity extends FragmentActivity {
             View rootView = inflater.inflate(R.layout.fragment_main_3_about,
                     container, false);
 
-            CustomList adapter = new CustomList(getActivity(), web, imageId);
+            CustomList adapter = new CustomList(getActivity(), web, description, imageId);
             ListView list=(ListView) rootView.findViewById(R.id.list);
             list.setAdapter(adapter);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
+                public void onItemClick(
+                        AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(getActivity(), "You Clicked at " + web[+position], Toast.LENGTH_SHORT).show();
                 }
             });
