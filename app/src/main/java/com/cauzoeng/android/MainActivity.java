@@ -48,7 +48,9 @@ public class MainActivity extends FragmentActivity {
 	 * constant.
 	 */
 	private static final String FRAGMENT_TAG = "FRAGMENT LOG";
-	private static final String EVENT_TAG = "EVENT LOG";
+    private static final String EVENT_TAG = "EVENT LOG";
+    private static final String TEST_TAG = "TESTING LOG";
+
 	private static final int NUMBER_OF_PAGES = 4;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -342,33 +344,33 @@ public class MainActivity extends FragmentActivity {
         }
 
         String[] web = {
-                "Google Plus",
-                "Twitter",
-                "Windows",
-                "Bing",
-                "Itunes",
-                "Wordpress",
-                "Drupal"
+            "Google Plus",
+            "Twitter",
+            "Windows",
+            "Bing",
+            "Itunes",
+            "Wordpress",
+            "Drupal"
         };
 
         String[] description = {
-                "Google PlusGoogle PlusGoogle PlusGoogle Plus",
-                "TwitterTwitterTwitterTwitterTwitter",
-                "WindowsWindowsWindowsWindowsWindowsWindows",
-                "Bing",
-                "Itunes",
-                "Wordpress",
-                "Drupal"
+            "Google PlusGoogle PlusGoogle PlusGoogle Plus",
+            "TwitterTwitterTwitterTwitterTwitter",
+            "WindowsWindowsWindowsWindowsWindowsWindows",
+            "Bing",
+            "Itunes",
+            "Wordpress",
+            "Drupal"
         };
 
         Integer[] imageId = {
-                R.drawable.ic_launcher,
-                R.drawable.ic_launcher,
-                R.drawable.ic_launcher,
-                R.drawable.ic_launcher,
-                R.drawable.ic_launcher,
-                R.drawable.ic_launcher,
-                R.drawable.ic_launcher
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher
         };
 
         @Override
@@ -377,14 +379,53 @@ public class MainActivity extends FragmentActivity {
             View rootView = inflater.inflate(R.layout.fragment_main_3_about,
                     container, false);
 
-            CustomList adapter = new CustomList(getActivity(), web, description, imageId);
+            final String[] subjects = {};
+            final String[] descriptions = {};
+            final String[] urls = {};
+            final String[] finished_dates = {};
+
+            AsyncHttpClient client = new AsyncHttpClient();
+            String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
+            client.get(url, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.i(EVENT_TAG, "Get http" + response);
+
+                    JSONObject obj = null;
+                    JSONArray obj_array = null;
+                    try {
+                        obj = new JSONObject(response);
+                        obj_array = obj.getJSONArray("items");
+
+                        Log.d("My App", obj.toString());
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                    } finally {
+
+                        try {
+                            for (int i = 0; i < obj_array.length(); i++) {
+                                JSONObject row = obj_array.getJSONObject(i);
+                                subjects[i] = row.getString("subject");
+                                descriptions[i] = row.getString("description");
+                                urls[i] = row.getString("url");
+                                finished_dates[i] = row.getString("finished_date");
+                            }
+
+                        } catch (Throwable t) {
+                            Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                        }
+                    }
+                }
+            });
+
+            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, imageId);
             ListView list=(ListView) rootView.findViewById(R.id.list);
             list.setAdapter(adapter);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(
                         AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getActivity(), "You Clicked at " + web[+position], Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
                 }
             });
 
