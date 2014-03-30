@@ -160,13 +160,45 @@ public class MainActivity extends FragmentActivity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main_1_previous,
 					container, false);
-			ListView listView = (ListView) rootView.findViewById(R.id.listView1);
+			final ListView listView = (ListView) rootView.findViewById(R.id.listView1);
 
-            // Defined Array values to show in ListView
-            String[] values = new String[20];
+            AsyncHttpClient client = new AsyncHttpClient();
+            String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
+            client.get(url, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.i(EVENT_TAG, "Get http" + response);
 
-            for(int i = 0; i < values.length; i++)
-                values[i] = "Lucky draw #" + i;
+                    JSONObject obj = null;
+                    JSONArray obj_array = null;
+                    try {
+                        obj = new JSONObject(response);
+                        obj_array = obj.getJSONArray("items");
+
+                        Log.d("My App", obj.toString());
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                    } finally {
+                        // Defined Array values to show in ListView
+                        String[] values = new String[obj_array.length()];
+
+                        try {
+                            for (int i = 0; i < values.length; i++) {
+                                JSONObject row = obj_array.getJSONObject(i);
+                                values[i] = row.getString("message");
+                            }
+
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                    getActivity(), R.layout.listview_row_item, R.id.textViewItem, values);
+
+                            // Assign adapter to ListView
+                            listView.setAdapter(adapter);
+                        } catch (Throwable t) {
+                            Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                        }
+                    }
+                }
+            });
 
             return rootView;
 		}
