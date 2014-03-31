@@ -1,13 +1,9 @@
 package com.cauzoeng.android;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
@@ -98,71 +94,92 @@ public class MainActivity extends FragmentActivity {
 		public HomeSectionFragment() {
 		}
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_0_home,
-					container, false);
-			TextView dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText("Home section.............");
+        Integer[] imageId = {
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
+            R.drawable.ic_launcher
+        };
 
-			Button clickGetButton = (Button) rootView.findViewById(R.id.button1);
-			Button clickPostButton = (Button) rootView.findViewById(R.id.button2);
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
+            final ListView list=(ListView) rootView.findViewById(R.id.list);
 
-			clickGetButton.setOnClickListener( new OnClickListener() {
+            AsyncHttpClient client = new AsyncHttpClient();
+            String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
+            client.get(url, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(String response) {
+                    Log.i(EVENT_TAG, "Get http" + response);
 
-	            @Override
-	            public void onClick(View v) {
-	                Log.i(EVENT_TAG, "Click get!!");
-	                AsyncHttpClient client = new AsyncHttpClient();
-	                client.get("http://httpbin.org/get", new AsyncHttpResponseHandler() {
-	                    @Override
-	                    public void onSuccess(String response) {
-	                    	Log.i(EVENT_TAG, "Get http" + response);
-	                    }
-	                });
-	            }
-	        });
+                    JSONObject obj = null;
+                    JSONArray obj_array = null;
+                    try {
+                        obj = new JSONObject(response);
+                        obj_array = obj.getJSONArray("items");
 
-			clickPostButton.setOnClickListener( new OnClickListener() {
+                        Log.d("My App", obj.toString());
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse JSON: \"" + t.getMessage() + "\"");
+                    } finally {
 
-	            @Override
-	            public void onClick(View v) {
-	                Log.i(EVENT_TAG, "Click post!!");
-	                HashMap<String, String> paramMap = new HashMap<String, String>();
-	                paramMap.put("key", "value");
-	                RequestParams params = new RequestParams(paramMap);
+                        try {
+                            int array_length = obj_array.length();
 
-	                AsyncHttpClient client = new AsyncHttpClient();
-	                client.post("http://httpbin.org/post", params, new AsyncHttpResponseHandler() {
-	                    @Override
-	                    public void onSuccess(String response) {
-	                    	Log.i(EVENT_TAG, "Post http" + response);
-	                    }
-	                });
-	            }
-	        });
+                            final String[] subjects = new String[array_length];
+                            final String[] descriptions = new String[array_length];
+                            final String[] urls = new String[array_length];
+                            final String[] finished_dates = new String[array_length];
 
-			return rootView;
-		}
-	}
+                            for (int i = 0; i < array_length; i++) {
+                                JSONObject row = obj_array.getJSONObject(i);
+                                subjects[i] = row.getString("subject");
+                                descriptions[i] = row.getString("description");
+                                urls[i] = row.getString("url");
+                                finished_dates[i] = row.getString("finish_date");
+                            }
+
+                            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, imageId);
+                            list.setAdapter(adapter);
+                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(
+                                        AdapterView<?> parent, View view, int position, long id) {
+                                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        } catch (Throwable t) {
+                            Log.e("My App", "Unknown: \"" + t.getMessage() + "\"");
+                        }
+                    }
+                }
+            });
+
+            return rootView;
+        }
+    }
+
 
     /**
      * Previous section fragment control.
      */
-	public static class PreviousSectionFragment extends Fragment {
-		public static final String ARG_SECTION_NUMBER = "section_number";
+    public static class PreviousSectionFragment extends Fragment {
+        public static final String ARG_SECTION_NUMBER = "section_number";
 
-		public PreviousSectionFragment() {
-		}
+        public PreviousSectionFragment() {
+        }
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_1_previous,
-					container, false);
-			final ListView listView = (ListView) rootView.findViewById(R.id.listView1);
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_1_previous, container, false);
+            final ListView listView = (ListView) rootView.findViewById(R.id.listView1);
 
             AsyncHttpClient client = new AsyncHttpClient();
             String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
@@ -182,7 +199,7 @@ public class MainActivity extends FragmentActivity {
                         Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
                     } finally {
                         // Defined Array values to show in ListView
-                        String[] values = new String[obj_array.length()];
+                        final String[] values = new String[obj_array.length()];
 
                         try {
                             for (int i = 0; i < values.length; i++) {
@@ -195,16 +212,25 @@ public class MainActivity extends FragmentActivity {
 
                             // Assign adapter to ListView
                             listView.setAdapter(adapter);
+                            listView.setAdapter(adapter);
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(
+                                        AdapterView<?> parent, View view, int position, long id) {
+                                    Toast.makeText(getActivity(), "You Clicked at " + values[position], Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         } catch (Throwable t) {
                             Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
                         }
                     }
                 }
             });
-
             return rootView;
-		}
+        }
 	}
+
 
     /**
      * Help fragment control.
@@ -215,81 +241,134 @@ public class MainActivity extends FragmentActivity {
 		public HelpSectionFragment() {
 		}
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_2_helps,
-					container, false);
-			TextView dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_3_about, container, false);
+            TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
+            dummyTextView.setText("Home section.............");
 
-			WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-			dummyTextView.setText("Help section.............: " + wm.getConnectionInfo().getMacAddress());
+            Button clickGetButton = (Button) rootView.findViewById(R.id.button1);
+            Button clickPostButton = (Button) rootView.findViewById(R.id.button2);
 
-			final Button clickPopupButton = (Button) rootView.findViewById(R.id.button1);
+            clickGetButton.setOnClickListener( new OnClickListener() {
 
-			clickPopupButton.setOnClickListener( new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(EVENT_TAG, "Click get!!");
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    client.get("http://httpbin.org/get", new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Log.i(EVENT_TAG, "Get http" + response);
+                        }
+                    });
+                }
+            });
 
-	            @Override
-	            public void onClick(View v) {
-	            	Log.i(EVENT_TAG, "click open popup http");
+            clickPostButton.setOnClickListener( new OnClickListener() {
 
-	            	View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
-	            	final PopupWindow mpopup = new PopupWindow(
-	            		popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-	                mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
-	                mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
+                @Override
+                public void onClick(View v) {
+                    Log.i(EVENT_TAG, "Click post!!");
+                    HashMap<String, String> paramMap = new HashMap<String, String>();
+                    paramMap.put("key", "value");
+                    RequestParams params = new RequestParams(paramMap);
 
-	                WebViewClient myWebClient = new WebViewClient()
-	                {
-	                	@Override
-	                	public boolean shouldOverrideUrlLoading(WebView  view, String  url)
-	                	{
-	                		// This line we let me load only pages inside "com" Webpage
-	                		if ( url.contains("com") == true )
-	                            //Load new URL Don't override URL Link
-	                			return false;
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    client.post("http://httpbin.org/post", params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Log.i(EVENT_TAG, "Post http" + response);
+                        }
+                    });
+                }
+            });
 
-	                		return true;
-	                    }
-	                };
+            return rootView;
+        }
+	}
 
-	                try {
-		                WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
-		        		webView.getSettings().setJavaScriptEnabled(true);
+    /**
+     * Help section fragment control.
+     */
+    public static class AboutSectionFragment extends Fragment {
+        public static final String ARG_SECTION_NUMBER = "section_number";
+
+        public AboutSectionFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_2_helps, container, false);
+            TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
+
+            WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+            dummyTextView.setText("MAC addr.......: " + wm.getConnectionInfo().getMacAddress());
+
+            Button clickPopupButton = (Button) rootView.findViewById(R.id.button1);
+            clickPopupButton.setOnClickListener( new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Log.i(EVENT_TAG, "click open popup http");
+
+                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
+                    final PopupWindow mpopup = new PopupWindow(
+                        popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+                    mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
+                    mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
+
+                    WebViewClient myWebClient = new WebViewClient()
+                    {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+                        {
+                            // This line we let me load only pages inside "com" Webpage
+                            if ( url.contains("com") == true )
+                                //Load new URL Don't override URL Link
+                                return false;
+
+                            return true;
+                        }
+                    };
+
+                    try {
+                        WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
+                        webView.getSettings().setJavaScriptEnabled(true);
                         webView.getSettings().setBuiltInZoomControls(true);
                         webView.getSettings().setSupportZoom(true);
-		        		webView.setWebViewClient(myWebClient);
-		        		webView.loadUrl("http://www.google.com");
+                        webView.setWebViewClient(myWebClient);
+                        webView.loadUrl("http://www.google.com");
 
-	                } catch (Exception e) {
-	                    Log.e(EVENT_TAG, "Web open " + e.toString());
-	                }
+                    } catch (Exception e) {
+                        Log.e(EVENT_TAG, "Web open " + e.toString());
+                    }
 
-	                Button btnOk = (Button)popUpView.findViewById(R.id.button1);
-	                btnOk.setOnClickListener(new OnClickListener()
-	                {
-	                    @Override
-	                    public void onClick(View v) {
-	    	            	Log.i(EVENT_TAG, "click ok popup http");
-	                        mpopup.dismiss();
-	                    }
-	                });
+                    Button btnOk = (Button)popUpView.findViewById(R.id.button1);
+                    btnOk.setOnClickListener(new OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v) {
+                            Log.i(EVENT_TAG, "click ok popup http");
+                            mpopup.dismiss();
+                        }
+                    });
 
-	                Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
-	                btnCancel.setOnClickListener(new OnClickListener()
-	                {
-	                    @Override
-	                    public void onClick(View v) {
-	    	            	Log.i(EVENT_TAG, "click cancel popup http");
-	                        mpopup.dismiss();
-	                    }
-	                });
-	            };
-			});
+                    Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
+                    btnCancel.setOnClickListener(new OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v) {
+                            Log.i(EVENT_TAG, "click cancel popup http");
+                            mpopup.dismiss();
+                        }
+                    });
+                };
+            });
 
-            final Button clickPopupFormButton = (Button) rootView.findViewById(R.id.button2);
-
+            Button clickPopupFormButton = (Button) rootView.findViewById(R.id.button2);
             clickPopupFormButton.setOnClickListener( new OnClickListener() {
 
                 @Override
@@ -328,109 +407,6 @@ public class MainActivity extends FragmentActivity {
                         Log.e(EVENT_TAG, "Web open " + e.toString());
                     }
                 };
-            });
-
-			return rootView;
-		}
-	}
-
-    /**
-     * Help section fragment control.
-     */
-    public static class AboutSectionFragment extends Fragment {
-        public static final String ARG_SECTION_NUMBER = "section_number";
-
-        public AboutSectionFragment() {
-        }
-
-        String[] web = {
-            "Google Plus",
-            "Twitter",
-            "Windows",
-            "Bing",
-            "Itunes",
-            "Wordpress",
-            "Drupal"
-        };
-
-        String[] description = {
-            "Google PlusGoogle PlusGoogle PlusGoogle Plus",
-            "TwitterTwitterTwitterTwitterTwitter",
-            "WindowsWindowsWindowsWindowsWindowsWindows",
-            "Bing",
-            "Itunes",
-            "Wordpress",
-            "Drupal"
-        };
-
-        Integer[] imageId = {
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher
-        };
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_3_about,
-                    container, false);
-
-            final ListView list=(ListView) rootView.findViewById(R.id.list);
-
-            AsyncHttpClient client = new AsyncHttpClient();
-            String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
-            client.get(url, new AsyncHttpResponseHandler() {
-                @Override
-                public void onSuccess(String response) {
-                    Log.i(EVENT_TAG, "Get http" + response);
-
-                    JSONObject obj = null;
-                    JSONArray obj_array = null;
-                    try {
-                        obj = new JSONObject(response);
-                        obj_array = obj.getJSONArray("items");
-
-                        Log.d("My App", obj.toString());
-                    } catch (Throwable t) {
-                        Log.e("My App", "Could not parse JSON: \"" + t.getMessage() + "\"");
-                    } finally {
-
-                        try {
-
-                            int array_length = obj_array.length();
-
-                            final String[] subjects = new String[array_length];
-                            final String[] descriptions = new String[array_length];
-                            final String[] urls = new String[array_length];
-                            final String[] finished_dates = new String[array_length];
-
-                            for (int i = 0; i < array_length; i++) {
-                                JSONObject row = obj_array.getJSONObject(i);
-                                subjects[i] = row.getString("subject");
-                                descriptions[i] = row.getString("description");
-                                urls[i] = row.getString("url");
-                                finished_dates[i] = row.getString("finish_date");
-                            }
-
-                            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, imageId);
-                            list.setAdapter(adapter);
-                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(
-                                        AdapterView<?> parent, View view, int position, long id) {
-                                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        } catch (Throwable t) {
-                            Log.e("My App", "Unknown: \"" + t.getMessage() + "\"");
-                        }
-                    }
-                }
             });
 
             return rootView;

@@ -29,9 +29,12 @@ public class CustomList extends ArrayAdapter<String>{
         View rowView = inflater.inflate(R.layout.listview_detailed_item, null, true);
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
         TextView txtDescription = (TextView) rowView.findViewById(R.id.description);
+        TextView txtCount = (TextView) rowView.findViewById(R.id.count);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
+
         txtTitle.setText(web[position]);
         txtDescription.setText(description[position]);
+        txtCount.setText("4355 人次");
         imageView.setImageResource(imageId[position]);
         return rowView;
     }

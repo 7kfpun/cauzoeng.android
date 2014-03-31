@@ -3,9 +3,9 @@
 
     <string name="app_name">com.cauzoeng.android</string>
     <string name="action_settings">Settings</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">是日抽獎</string>
+    <string name="title_section2">過往抽獎</string>
+    <string name="title_section3">關於我們</string>
     <string name="title_section4">Section 4</string>
 
 </resources>
