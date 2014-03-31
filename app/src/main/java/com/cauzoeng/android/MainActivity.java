@@ -379,10 +379,7 @@ public class MainActivity extends FragmentActivity {
             View rootView = inflater.inflate(R.layout.fragment_main_3_about,
                     container, false);
 
-            final String[] subjects = {};
-            final String[] descriptions = {};
-            final String[] urls = {};
-            final String[] finished_dates = {};
+            final ListView list=(ListView) rootView.findViewById(R.id.list);
 
             AsyncHttpClient client = new AsyncHttpClient();
             String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
@@ -399,33 +396,40 @@ public class MainActivity extends FragmentActivity {
 
                         Log.d("My App", obj.toString());
                     } catch (Throwable t) {
-                        Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                        Log.e("My App", "Could not parse JSON: \"" + t.getMessage() + "\"");
                     } finally {
 
                         try {
-                            for (int i = 0; i < obj_array.length(); i++) {
+
+                            int array_length = obj_array.length();
+
+                            final String[] subjects = new String[array_length];
+                            final String[] descriptions = new String[array_length];
+                            final String[] urls = new String[array_length];
+                            final String[] finished_dates = new String[array_length];
+
+                            for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
                                 subjects[i] = row.getString("subject");
                                 descriptions[i] = row.getString("description");
                                 urls[i] = row.getString("url");
-                                finished_dates[i] = row.getString("finished_date");
+                                finished_dates[i] = row.getString("finish_date");
                             }
 
+                            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, imageId);
+                            list.setAdapter(adapter);
+                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(
+                                        AdapterView<?> parent, View view, int position, long id) {
+                                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         } catch (Throwable t) {
-                            Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                            Log.e("My App", "Unknown: \"" + t.getMessage() + "\"");
                         }
                     }
-                }
-            });
-
-            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, imageId);
-            ListView list=(ListView) rootView.findViewById(R.id.list);
-            list.setAdapter(adapter);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(
-                        AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
                 }
             });
 
