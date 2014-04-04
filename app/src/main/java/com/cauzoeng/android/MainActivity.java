@@ -101,6 +101,7 @@ public class MainActivity extends FragmentActivity {
             R.drawable.ic_launcher,
             R.drawable.ic_launcher,
             R.drawable.ic_launcher,
+            R.drawable.ic_launcher,
             R.drawable.ic_launcher
         };
 
