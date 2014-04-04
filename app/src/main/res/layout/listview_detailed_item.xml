@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="5dp">
+    android:layout_height="match_parent">
 
     <TableRow>
         <ImageView
@@ -10,11 +9,12 @@
             android:layout_width="60dp"
             android:layout_height="80dp"
             android:padding="2dip"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/ic_launcher" />
 
         <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" >
 
             <TableRow>
                 <TextView
@@ -22,7 +22,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="22dp"
                     android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
+                    android:paddingBottom="4dp"
                     android:textStyle="bold"
                     android:text="Title" />
             </TableRow>
@@ -32,23 +32,28 @@
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="false"
+                    android:ellipsize="end"
                     android:lines="2"
+                    android:maxLines="2"
                     android:text="Description" />
             </TableRow>
 
-            <TableRow>
+            <TableRow >
                 <TextView
                     android:id="@+id/finish_date"
                     android:layout_width="wrap_content"
                     android:text="Count"
-                    android:layout_height="20dp" />
+                    android:layout_height="20dp"
+                    android:layout_weight="1.0" />
 
                 <TextView
                     android:id="@+id/count"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:text="Count"
-                    android:layout_height="20dp" />
+                    android:padding="0dp"
+                    android:gravity="right"
+                    android:layout_height="20dp"
+                    android:layout_weight="1.0" />
             </TableRow>
         </TableLayout>
     </TableRow>

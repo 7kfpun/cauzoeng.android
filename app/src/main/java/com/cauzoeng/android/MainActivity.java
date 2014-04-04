@@ -1,6 +1,7 @@
 package com.cauzoeng.android;
 
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Locale;
 
 import org.json.JSONArray;
@@ -94,17 +95,6 @@ public class MainActivity extends FragmentActivity {
 		public HomeSectionFragment() {
 		}
 
-        Integer[] imageId = {
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher
-        };
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -137,6 +127,7 @@ public class MainActivity extends FragmentActivity {
                             final String[] urls = new String[array_length];
                             final String[] finish_dates = new String[array_length];
                             final String[] users = new String[array_length];
+                            final Integer[] imageId = new Integer[array_length];
 
                             for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
@@ -144,6 +135,7 @@ public class MainActivity extends FragmentActivity {
                                 descriptions[i] = row.getString("description");
                                 urls[i] = row.getString("url");
                                 finish_dates[i] = row.getString("finish_date");
+                                imageId[i] = R.drawable.ic_launcher;
 
                                 if (row.has("user")) {
                                     users[i] = row.getString("user");
