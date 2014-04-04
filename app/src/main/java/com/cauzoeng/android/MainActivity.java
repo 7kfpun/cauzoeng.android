@@ -107,11 +107,11 @@ public class MainActivity extends FragmentActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
             final ListView list=(ListView) rootView.findViewById(R.id.list);
 
             AsyncHttpClient client = new AsyncHttpClient();
-            String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
+            String url = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
             client.get(url, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
@@ -123,7 +123,7 @@ public class MainActivity extends FragmentActivity {
                         obj = new JSONObject(response);
                         obj_array = obj.getJSONArray("items");
 
-                        Log.d("My App", obj.toString());
+                        Log.d("Success get JSON", obj.toString());
                     } catch (Throwable t) {
                         Log.e("My App", "Could not parse JSON: \"" + t.getMessage() + "\"");
                     } finally {
@@ -134,15 +134,24 @@ public class MainActivity extends FragmentActivity {
                             final String[] subjects = new String[array_length];
                             final String[] descriptions = new String[array_length];
                             final String[] urls = new String[array_length];
-                            final String[] finished_dates = new String[array_length];
+                            final String[] finish_dates = new String[array_length];
+                            final String[] users = new String[array_length];
 
                             for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
                                 subjects[i] = row.getString("subject");
                                 descriptions[i] = row.getString("description");
                                 urls[i] = row.getString("url");
-                                finished_dates[i] = row.getString("finish_date");
+                                finish_dates[i] = row.getString("finish_date");
+
+                                if (row.has("user")) {
+                                    users[i] = row.getString("user");
+                                } else {
+                                    users[i] = "";
+                                }
                             }
+
+                            Log.d("Success get JSON", subjects.toString());
 
                             CustomList adapter = new CustomList(getActivity(), subjects, descriptions, imageId);
                             list.setAdapter(adapter);
@@ -156,6 +165,7 @@ public class MainActivity extends FragmentActivity {
 
                         } catch (Throwable t) {
                             Log.e("My App", "Unknown: \"" + t.getMessage() + "\"");
+                            Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

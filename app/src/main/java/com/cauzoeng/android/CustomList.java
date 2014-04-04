@@ -18,6 +18,7 @@ public class CustomList extends ArrayAdapter<String>{
                       String[] web, String[] description, Integer[] imageId) {
         super(context, R.layout.listview_detailed_item, web);
         this.context = context;
+
         this.web = web;
         this.description = description;
         this.imageId = imageId;
@@ -34,7 +35,7 @@ public class CustomList extends ArrayAdapter<String>{
 
         txtTitle.setText(web[position]);
         txtDescription.setText(description[position]);
-        txtCount.setText("4355 人次");
+        txtCount.setText("435 人次");
         imageView.setImageResource(imageId[position]);
         return rowView;
     }
