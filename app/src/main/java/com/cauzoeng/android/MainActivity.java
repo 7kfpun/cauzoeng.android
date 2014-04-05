@@ -1,7 +1,6 @@
 package com.cauzoeng.android;
 
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Locale;
 
 import org.json.JSONArray;
@@ -9,6 +8,7 @@ import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -47,6 +47,8 @@ public class MainActivity extends FragmentActivity {
 	private static final String FRAGMENT_TAG = "FRAGMENT LOG";
     private static final String EVENT_TAG = "EVENT LOG";
     private static final String TEST_TAG = "TESTING LOG";
+
+    public final static String EXTRA_MESSAGE = "http://www.google.com";
 
 	private static final int NUMBER_OF_PAGES = 4;
     /**
@@ -154,61 +156,9 @@ public class MainActivity extends FragmentActivity {
                                         AdapterView<?> parent, View view, int position, long id) {
                                     Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
 
-                                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
-                                    final PopupWindow mpopup = new PopupWindow(
-                                            popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-                                    mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
-                                    mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
-
-                                    WebViewClient myWebClient = new WebViewClient()
-                                    {
-                                        @Override
-                                        public boolean shouldOverrideUrlLoading(WebView  view, String  url)
-                                        {
-                                            // This line we let me load only pages inside "com" Webpage
-                                            if ( url.contains("com") == true )
-                                                //Load new URL Don't override URL Link
-                                                return false;
-
-                                            return true;
-                                        }
-                                    };
-
-                                    try {
-                                        WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
-                                        webView.getSettings().setJavaScriptEnabled(true);
-                                        webView.getSettings().setBuiltInZoomControls(true);
-                                        //webView.getSettings().setSupportZoom(true);
-                                        //webView.setWebViewClient(myWebClient);
-                                        webView.setScrollbarFadingEnabled(false);
-                                        webView.setVerticalScrollBarEnabled(true);
-                                        webView.setHorizontalScrollBarEnabled(true);
-
-                                        webView.loadUrl(urls[position]);
-
-                                    } catch (Exception e) {
-                                        Log.e(EVENT_TAG, "Web open " + e.toString());
-                                    }
-
-                                    Button btnOk = (Button)popUpView.findViewById(R.id.button1);
-                                    btnOk.setOnClickListener(new OnClickListener()
-                                    {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Log.i(EVENT_TAG, "click ok popup http");
-                                            mpopup.dismiss();
-                                        }
-                                    });
-
-                                    Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
-                                    btnCancel.setOnClickListener(new OnClickListener()
-                                    {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Log.i(EVENT_TAG, "click cancel popup http");
-                                            mpopup.dismiss();
-                                        }
-                                    });
+                                    Intent intent = new Intent(getActivity(), LotteryDescriptionActivity.class);
+                                    intent.putExtra(EXTRA_MESSAGE, urls[position]);
+                                    startActivity(intent);
                                 }
                             });
 

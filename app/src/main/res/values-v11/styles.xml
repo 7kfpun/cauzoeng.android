@@ -8,4 +8,8 @@
         <!-- API 11 theme customizations can go here. -->
     </style>
 
+    <style name="QueryTheme" parent="@style/Theme.AppCompat">
+        <!-- Any customizations for your app running on devices with Theme.Holo here -->
+    </style>
+
 </resources>
