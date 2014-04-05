@@ -192,10 +192,10 @@ public class MainActivity extends FragmentActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main_1_previous, container, false);
-            final ListView listView = (ListView) rootView.findViewById(R.id.listView1);
+            final ListView list = (ListView) rootView.findViewById(R.id.previousListView);
 
             AsyncHttpClient client = new AsyncHttpClient();
-            String url = "https://memorizingwords.appspot.com/_ah/api/helloworld/v1/hellogreeting/";
+            String url = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
             client.get(url, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
@@ -207,39 +207,51 @@ public class MainActivity extends FragmentActivity {
                         obj = new JSONObject(response);
                         obj_array = obj.getJSONArray("items");
 
-                        Log.d("My App", obj.toString());
+                        Log.d("Success get JSON", obj.toString());
                     } catch (Throwable t) {
-                        Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                        Log.e("My App", "Could not parse JSON: \"" + t.getMessage() + "\"");
                     } finally {
-                        // Defined Array values to show in ListView
-                        final String[] values = new String[obj_array.length()];
 
                         try {
-                            for (int i = 0; i < values.length; i++) {
+                            int array_length = obj_array.length();
+
+                            final String[] ids = new String[array_length];
+                            final String[] subjects = new String[array_length];
+                            final String[] descriptions = new String[array_length];
+                            final String[] urls = new String[array_length];
+                            final String[] finish_dates = new String[array_length];
+                            final String[] users = new String[array_length];
+                            final Integer[] imageId = new Integer[array_length];
+
+                            for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
-                                values[i] = row.getString("message");
+                                ids[i] = row.getString("id");
+                                subjects[i] = row.getString("subject");
+                                descriptions[i] = row.getString("description");
+                                urls[i] = row.getString("url");
+                                finish_dates[i] = row.getString("finish_date");
+                                imageId[i] = R.drawable.ic_launcher;
+
+                                if (row.has("user")) {
+                                    users[i] = row.getString("user");
+                                } else {
+                                    users[i] = "";
+                                }
                             }
 
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                    getActivity(), R.layout.listview_row_item, R.id.textViewItem, values);
+                            Log.d("Success get JSON", subjects.toString());
 
-                            // Assign adapter to ListView
-                            listView.setAdapter(adapter);
-                            listView.setAdapter(adapter);
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(
-                                        AdapterView<?> parent, View view, int position, long id) {
-                                    Toast.makeText(getActivity(), "You Clicked at " + values[position], Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            PreviousList adapter = new PreviousList(getActivity(), subjects, descriptions, finish_dates, users);
+                            list.setAdapter(adapter);
 
                         } catch (Throwable t) {
-                            Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
+                            Log.e("My App", "Unknown: \"" + t.getMessage() + "\"");
+                            Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
             });
+
             return rootView;
         }
 	}

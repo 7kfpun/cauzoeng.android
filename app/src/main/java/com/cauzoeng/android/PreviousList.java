@@ -8,40 +8,38 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomList extends ArrayAdapter<String>{
+public class PreviousList extends ArrayAdapter<String>{
     private final Activity context;
     private final String[] subjects;
     private final String[] descriptions;
     private final String[] finish_dates;
-    private final Integer[] imageIds;
+    private final String[] winners;
 
-    public CustomList(Activity context,
-                      String[] subject, String[] description,
-                      String[] finish_date, Integer[] imageId) {
-        super(context, R.layout.listview_detailed_item, subject);
+    public PreviousList(Activity context,
+                        String[] subjects, String[] descriptions,
+                        String[] finish_dates, String[] winners) {
+        super(context, R.layout.listview_detailed_item, subjects);
         this.context = context;
 
-        this.subjects = subject;
-        this.descriptions = description;
-        this.finish_dates = finish_date;
-        this.imageIds = imageId;
+        this.subjects = subjects;
+        this.descriptions = descriptions;
+        this.finish_dates = finish_dates;
+        this.winners = winners;
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.listview_detailed_item, null, true);
+        View rowView = inflater.inflate(R.layout.listview_previous_item, null, true);
         TextView txtSubject = (TextView) rowView.findViewById(R.id.subject);
         TextView txtDescription = (TextView) rowView.findViewById(R.id.description);
         TextView txtFinishDate = (TextView) rowView.findViewById(R.id.finish_date);
-        TextView txtCount = (TextView) rowView.findViewById(R.id.count);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
+        TextView txtWinner = (TextView) rowView.findViewById(R.id.winner);
 
         txtSubject.setText(subjects[position]);
         txtDescription.setText(descriptions[position]);
         txtFinishDate.setText(finish_dates[position].split("T")[0]);
-        txtCount.setText("324 人次.");
-        imageView.setImageResource(imageIds[position]);
+        txtWinner.setText("Causeway bay");
         return rowView;
     }
 }
