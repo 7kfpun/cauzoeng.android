@@ -48,7 +48,8 @@ public class MainActivity extends FragmentActivity {
     private static final String EVENT_TAG = "EVENT LOG";
     private static final String TEST_TAG = "TESTING LOG";
 
-    public final static String EXTRA_MESSAGE = "http://www.google.com";
+    public final static String EXTRA_MESSAGE_LOTTERY = "0";
+    public final static String EXTRA_MESSAGE_URL = "http://www.google.com";
 
 	private static final int NUMBER_OF_PAGES = 4;
     /**
@@ -101,7 +102,7 @@ public class MainActivity extends FragmentActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
-            final ListView list=(ListView) rootView.findViewById(R.id.list);
+            final ListView list = (ListView) rootView.findViewById(R.id.list);
 
             AsyncHttpClient client = new AsyncHttpClient();
             String url = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
@@ -124,6 +125,7 @@ public class MainActivity extends FragmentActivity {
                         try {
                             int array_length = obj_array.length();
 
+                            final String[] ids = new String[array_length];
                             final String[] subjects = new String[array_length];
                             final String[] descriptions = new String[array_length];
                             final String[] urls = new String[array_length];
@@ -133,6 +135,7 @@ public class MainActivity extends FragmentActivity {
 
                             for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
+                                ids[i] = row.getString("id");
                                 subjects[i] = row.getString("subject");
                                 descriptions[i] = row.getString("description");
                                 urls[i] = row.getString("url");
@@ -157,7 +160,8 @@ public class MainActivity extends FragmentActivity {
                                     Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
 
                                     Intent intent = new Intent(getActivity(), LotteryDescriptionActivity.class);
-                                    intent.putExtra(EXTRA_MESSAGE, urls[position]);
+                                    intent.putExtra(EXTRA_MESSAGE_LOTTERY, ids[position]);
+                                    intent.putExtra(EXTRA_MESSAGE_URL, urls[position]);
                                     startActivity(intent);
                                 }
                             });
