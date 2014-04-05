@@ -28,7 +28,6 @@
         <activity
             android:name=".LotteryDescriptionActivity"
             android:label="LotteryDescriptionActivity"
-            android:theme="@style/QueryTheme"
             android:parentActivityName="com.cauzoeng.android.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
