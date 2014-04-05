@@ -2,7 +2,9 @@ package com.cauzoeng.android;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,11 +21,18 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpResponseException;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 
@@ -50,7 +59,7 @@ public class LotteryDescriptionActivity extends FragmentActivity {
             public boolean shouldOverrideUrlLoading(WebView  view, String  url)
             {
             // This line we let me load only pages inside "com" Webpage
-            if ( url.contains("com") == true )
+            if ( url.contains("com") )
                 //Load new URL Don't override URL Link
                 return false;
 
@@ -66,7 +75,14 @@ public class LotteryDescriptionActivity extends FragmentActivity {
 
         webView.loadUrl(url);
 
+        /*Lottery.Builder builder = new Lottery.Builder(
+                AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+        service = builder.build();*/
+
         Button clickPostButton = (Button) findViewById(R.id.bet_button);
+
+        /*WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        dummyTextView.setText("MAC addr.......: " + wm.getConnectionInfo().getMacAddress());*/
 
         clickPostButton.setOnClickListener( new View.OnClickListener() {
             /* curl -X POST localhost:8080/_ah/api/lottery/v1/bet/
@@ -81,8 +97,23 @@ public class LotteryDescriptionActivity extends FragmentActivity {
                 paramMap.put("user", "fake user");
                 RequestParams params = new RequestParams(paramMap);
 
+                StringEntity json = null;
+                try {
+                    JSONObject obj = new JSONObject();
+                    obj.put("lottery", id);
+                    obj.put("user", "fake user");
+
+                    json = new StringEntity(obj.toString());
+                    Log.i("JSON Parser", obj.toString());
+
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("JSON Parser", "UnsupportedEncodingException " + e.toString());
+                } catch (JSONException e) {
+                    Log.e("JSON Parser", "Error parsing data " + e.toString());
+                }
+
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.post("https://cauzoeng.appspot.com/_ah/api/lottery/v1/bet/", params, new JsonHttpResponseHandler() {
+                client.post(null, "https://cauzoeng.appspot.com/_ah/api/lottery/v1/bet/", null, json, "application/json", new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(String response) {
                         Log.i("POST BET", "Post http" + response);
