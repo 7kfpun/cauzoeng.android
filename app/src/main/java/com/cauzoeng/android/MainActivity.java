@@ -16,22 +16,20 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
-import android.util.Log;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.loopj.android.http.*;
@@ -44,9 +42,10 @@ public class MainActivity extends FragmentActivity {
 	/**
 	 * constant.
 	 */
-	private static final String FRAGMENT_TAG = "FRAGMENT LOG";
-    private static final String EVENT_TAG = "EVENT LOG";
-    private static final String TEST_TAG = "TESTING LOG";
+	private static final String FRAGMENT_TAG = "FRAGMENT";
+    private static final String EVENT_TAG = "EVENT";
+    private static final String JSON_TAG = "JSON";
+    private static final String HTTP_TAG = "HTTP";
 
     public final static String EXTRA_MESSAGE_LOTTERY = "0";
     public final static String EXTRA_MESSAGE_URL = "http://www.google.com";
@@ -109,7 +108,7 @@ public class MainActivity extends FragmentActivity {
             client.get(url, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.i(EVENT_TAG, "Get http" + response);
+                    Log.i(HTTP_TAG, "Get http" + response);
 
                     JSONObject obj = null;
                     JSONArray obj_array = null;
@@ -117,9 +116,9 @@ public class MainActivity extends FragmentActivity {
                         obj = new JSONObject(response);
                         obj_array = obj.getJSONArray("items");
 
-                        Log.d("Success get JSON", obj.toString());
+                        Log.d(JSON_TAG, "Parsed JSON: " + obj.toString());
                     } catch (Throwable t) {
-                        Log.e("My App", "Could not parse JSON: \"" + t.getMessage() + "\"");
+                        Log.e(JSON_TAG, "Could not parse JSON: " + t.getMessage());
                     } finally {
 
                         try {
@@ -149,9 +148,10 @@ public class MainActivity extends FragmentActivity {
                                 }
                             }
 
-                            Log.d("Success get JSON", subjects.toString());
+                            Log.d(JSON_TAG, "Successful parse data: " + subjects.toString());
 
-                            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, finish_dates, imageId);
+                            CustomList adapter = new CustomList(
+                                 getActivity(), subjects, descriptions, finish_dates, imageId);
                             list.setAdapter(adapter);
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -163,12 +163,13 @@ public class MainActivity extends FragmentActivity {
                                     intent.putExtra(EXTRA_MESSAGE_LOTTERY, ids[position]);
                                     intent.putExtra(EXTRA_MESSAGE_URL, urls[position]);
                                     startActivity(intent);
+
+                                    Log.i(EVENT_TAG, "Start an activity.");
                                 }
                             });
 
                         } catch (Throwable t) {
-                            Log.e("My App", "Unknown: \"" + t.getMessage() + "\"");
-                            Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e(JSON_TAG, "Unknown: " + t.getMessage());
                         }
                     }
                 }
@@ -207,9 +208,9 @@ public class MainActivity extends FragmentActivity {
                         obj = new JSONObject(response);
                         obj_array = obj.getJSONArray("items");
 
-                        Log.d("Success get JSON", obj.toString());
+                        Log.d(JSON_TAG, "Parsed JSON: " + obj.toString());
                     } catch (Throwable t) {
-                        Log.e("My App", "Could not parse JSON: \"" + t.getMessage() + "\"");
+                        Log.e(JSON_TAG, "Could not parse JSON: " + t.getMessage());
                     } finally {
 
                         try {
@@ -239,19 +240,17 @@ public class MainActivity extends FragmentActivity {
                                 }
                             }
 
-                            Log.d("Success get JSON", subjects.toString());
+                            Log.d(JSON_TAG, "Successful parse data: " + subjects.toString());
 
                             PreviousList adapter = new PreviousList(getActivity(), subjects, descriptions, finish_dates, users);
                             list.setAdapter(adapter);
 
                         } catch (Throwable t) {
-                            Log.e("My App", "Unknown: \"" + t.getMessage() + "\"");
-                            Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e(JSON_TAG, "Unknown: " + t.getMessage());
                         }
                     }
                 }
             });
-
             return rootView;
         }
 	}
