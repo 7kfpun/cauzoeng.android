@@ -40,7 +40,7 @@ public class CustomList extends ArrayAdapter<String>{
         txtSubject.setText(subjects[position]);
         txtDescription.setText(descriptions[position]);
         txtFinishDate.setText(finish_dates[position].split("T")[0]);
-        txtFinishDate.setText("324 人次.");
+        txtCount.setText("324 人次.");
         imageView.setImageResource(imageIds[position]);
         return rowView;
     }
