@@ -99,9 +99,16 @@ public class LotteryDescriptionActivity extends FragmentActivity {
 
                 StringEntity json = null;
                 try {
+                    WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                    String mac_address = wm.getConnectionInfo().getMacAddress();
+                    String user = "FAKE_USER";
+                    if (mac_address != null && !mac_address.isEmpty()) {
+                        user = mac_address;
+                    }
+
                     JSONObject obj = new JSONObject();
                     obj.put("lottery", id);
-                    obj.put("user", "fake user");
+                    obj.put("user", user);
 
                     json = new StringEntity(obj.toString());
                     Log.i("JSON Parser", obj.toString());

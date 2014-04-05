@@ -151,7 +151,7 @@ public class MainActivity extends FragmentActivity {
 
                             Log.d("Success get JSON", subjects.toString());
 
-                            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, imageId);
+                            CustomList adapter = new CustomList(getActivity(), subjects, descriptions, finish_dates, imageId);
                             list.setAdapter(adapter);
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
