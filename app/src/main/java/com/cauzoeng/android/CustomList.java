@@ -13,11 +13,11 @@ public class CustomList extends ArrayAdapter<String>{
     private final String[] subjects;
     private final String[] descriptions;
     private final String[] finish_dates;
-    private final Integer[] imageIds;
+    private final int[] imageIds;
 
     public CustomList(Activity context,
                       String[] subject, String[] description,
-                      String[] finish_date, Integer[] imageId) {
+                      String[] finish_date, int[] imageId) {
         super(context, R.layout.listview_detailed_item, subject);
         this.context = context;
 

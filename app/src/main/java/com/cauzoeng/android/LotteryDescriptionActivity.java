@@ -21,8 +21,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpResponseException;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -92,10 +90,10 @@ public class LotteryDescriptionActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Log.i("POST BET", "Click post!!");
-                HashMap<String, String> paramMap = new HashMap<String, String>();
+                /*HashMap<String, String> paramMap = new HashMap<String, String>();
                 paramMap.put("id", id);
                 paramMap.put("user", "fake user");
-                RequestParams params = new RequestParams(paramMap);
+                RequestParams params = new RequestParams(paramMap);*/
 
                 StringEntity json = null;
                 try {

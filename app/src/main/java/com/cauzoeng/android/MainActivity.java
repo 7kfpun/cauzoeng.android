@@ -50,6 +50,8 @@ public class MainActivity extends FragmentActivity {
     public final static String EXTRA_MESSAGE_LOTTERY = "0";
     public final static String EXTRA_MESSAGE_URL = "http://www.google.com";
 
+    public final static String LOTTERY_API_URL = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
+
 	private static final int NUMBER_OF_PAGES = 4;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -104,8 +106,7 @@ public class MainActivity extends FragmentActivity {
             final ListView list = (ListView) rootView.findViewById(R.id.list);
 
             AsyncHttpClient client = new AsyncHttpClient();
-            String url = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
-            client.get(url, new AsyncHttpResponseHandler() {
+            client.get(LOTTERY_API_URL, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
                     Log.i(HTTP_TAG, "Get http" + response);
@@ -130,7 +131,7 @@ public class MainActivity extends FragmentActivity {
                             final String[] urls = new String[array_length];
                             final String[] finish_dates = new String[array_length];
                             final String[] users = new String[array_length];
-                            final Integer[] imageId = new Integer[array_length];
+                            final int[] imageIds = new int[array_length];
 
                             for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
@@ -139,7 +140,7 @@ public class MainActivity extends FragmentActivity {
                                 descriptions[i] = row.getString("description");
                                 urls[i] = row.getString("url");
                                 finish_dates[i] = row.getString("finish_date");
-                                imageId[i] = R.drawable.ic_launcher;
+                                imageIds[i] = R.drawable.ic_launcher;
 
                                 if (row.has("user")) {
                                     users[i] = row.getString("user");
@@ -151,7 +152,7 @@ public class MainActivity extends FragmentActivity {
                             Log.d(JSON_TAG, "Successful parse data: " + subjects.toString());
 
                             CustomList adapter = new CustomList(
-                                 getActivity(), subjects, descriptions, finish_dates, imageId);
+                                 getActivity(), subjects, descriptions, finish_dates, imageIds);
                             list.setAdapter(adapter);
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -196,8 +197,7 @@ public class MainActivity extends FragmentActivity {
             final ListView list = (ListView) rootView.findViewById(R.id.previousListView);
 
             AsyncHttpClient client = new AsyncHttpClient();
-            String url = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
-            client.get(url, new AsyncHttpResponseHandler() {
+            client.get(LOTTERY_API_URL, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
                     Log.i(EVENT_TAG, "Get http" + response);
