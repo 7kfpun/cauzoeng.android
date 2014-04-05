@@ -153,6 +153,62 @@ public class MainActivity extends FragmentActivity {
                                 public void onItemClick(
                                         AdapterView<?> parent, View view, int position, long id) {
                                     Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
+
+                                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
+                                    final PopupWindow mpopup = new PopupWindow(
+                                            popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+                                    mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
+                                    mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
+
+                                    WebViewClient myWebClient = new WebViewClient()
+                                    {
+                                        @Override
+                                        public boolean shouldOverrideUrlLoading(WebView  view, String  url)
+                                        {
+                                            // This line we let me load only pages inside "com" Webpage
+                                            if ( url.contains("com") == true )
+                                                //Load new URL Don't override URL Link
+                                                return false;
+
+                                            return true;
+                                        }
+                                    };
+
+                                    try {
+                                        WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
+                                        webView.getSettings().setJavaScriptEnabled(true);
+                                        webView.getSettings().setBuiltInZoomControls(true);
+                                        //webView.getSettings().setSupportZoom(true);
+                                        //webView.setWebViewClient(myWebClient);
+                                        webView.setScrollbarFadingEnabled(false);
+                                        webView.setVerticalScrollBarEnabled(true);
+                                        webView.setHorizontalScrollBarEnabled(true);
+
+                                        webView.loadUrl(urls[position]);
+
+                                    } catch (Exception e) {
+                                        Log.e(EVENT_TAG, "Web open " + e.toString());
+                                    }
+
+                                    Button btnOk = (Button)popUpView.findViewById(R.id.button1);
+                                    btnOk.setOnClickListener(new OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Log.i(EVENT_TAG, "click ok popup http");
+                                            mpopup.dismiss();
+                                        }
+                                    });
+
+                                    Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
+                                    btnCancel.setOnClickListener(new OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Log.i(EVENT_TAG, "click cancel popup http");
+                                            mpopup.dismiss();
+                                        }
+                                    });
                                 }
                             });
 
