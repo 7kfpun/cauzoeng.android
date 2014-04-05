@@ -7,5 +7,7 @@
     <string name="title_section2">過往抽獎</string>
     <string name="title_section3">關於我們</string>
     <string name="title_section4">Section 4</string>
+    <string name="title_activity_lottery">LotteryActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
