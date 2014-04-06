@@ -128,6 +128,7 @@ public class MainActivity extends FragmentActivity {
 
                             final String[] ids = new String[array_length];
                             final String[] subjects = new String[array_length];
+                            final Double[] prices = new Double[array_length];
                             final String[] descriptions = new String[array_length];
                             final String[] urls = new String[array_length];
                             final String[] finish_dates = new String[array_length];
@@ -147,6 +148,12 @@ public class MainActivity extends FragmentActivity {
                                     subjects[i] = row.getString("subject");
                                 } else {
                                     subjects[i] = "";
+                                }
+
+                                if (row.has("price")) {
+                                    prices[i] = row.getDouble("price");
+                                } else {
+                                    prices[i] = 0.0;
                                 }
 
                                 if (row.has("description")) {
@@ -179,7 +186,7 @@ public class MainActivity extends FragmentActivity {
                             Log.d(JSON_TAG, "Successful parse data: " + subjects.toString());
 
                             CurrentList adapter = new CurrentList(
-                                    getActivity(), subjects, descriptions, finish_dates, imageIds);
+                                    getActivity(), subjects, prices, descriptions, finish_dates, imageIds);
                             list.setAdapter(adapter);
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -246,6 +253,7 @@ public class MainActivity extends FragmentActivity {
 
                             final String[] ids = new String[array_length];
                             final String[] subjects = new String[array_length];
+                            final Double[] prices = new Double[array_length];
                             final String[] descriptions = new String[array_length];
                             final String[] urls = new String[array_length];
                             final String[] finish_dates = new String[array_length];
@@ -265,6 +273,12 @@ public class MainActivity extends FragmentActivity {
                                     subjects[i] = row.getString("subject");
                                 } else {
                                     subjects[i] = "";
+                                }
+
+                                if (row.has("price")) {
+                                    prices[i] = row.getDouble("price");
+                                } else {
+                                    prices[i] = 0.0;
                                 }
 
                                 if (row.has("description")) {
