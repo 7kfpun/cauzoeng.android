@@ -26,6 +26,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,9 +86,6 @@ public class LotteryDescriptionActivity extends FragmentActivity {
 
         Button clickPostButton = (Button) findViewById(R.id.bet_button);
 
-        /*WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-        dummyTextView.setText("MAC addr.......: " + wm.getConnectionInfo().getMacAddress());*/
-
         clickPostButton.setOnClickListener( new View.OnClickListener() {
             /* curl -X POST localhost:8080/_ah/api/lottery/v1/bet/
             -d '{"user": "", "lottery": ""}' -H "Content-Type: application/json""
@@ -104,15 +102,15 @@ public class LotteryDescriptionActivity extends FragmentActivity {
                 StringEntity json = null;
                 try {
                     WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                    String mac_address = wm.getConnectionInfo().getMacAddress();
+                    String macAddress = wm.getConnectionInfo().getMacAddress();
                     String user = "FAKE_USER";
-                    if (mac_address != null && !mac_address.isEmpty()) {
-                        user = mac_address;
+                    if (macAddress != null && !macAddress.isEmpty()) {
+                        user = macAddress;
                     }
 
                     JSONObject obj = new JSONObject();
                     obj.put("lottery", id);
-                    obj.put("user", user);
+                    //obj.put("user", user);
 
                     json = new StringEntity(obj.toString());
                     Log.i(JSON_TAG, obj.toString());
@@ -124,10 +122,16 @@ public class LotteryDescriptionActivity extends FragmentActivity {
                 }
 
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.post(null, LOTTERY_BET_API_URL, null, json, "application/json", new JsonHttpResponseHandler() {
+                client.post(null, LOTTERY_BET_API_URL, null, json, "application/json", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(String response) {
-                        Log.i(HTTP_TAG, "Post http" + response);
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable e, String response) {
+                        Log.e(HTTP_TAG, "Bet failure: " + response.toString());
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
