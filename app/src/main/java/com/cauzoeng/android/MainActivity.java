@@ -136,11 +136,37 @@ public class MainActivity extends FragmentActivity {
 
                             for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
-                                ids[i] = row.getString("id");
-                                subjects[i] = row.getString("subject");
-                                descriptions[i] = row.getString("description");
-                                urls[i] = row.getString("url");
-                                finish_dates[i] = row.getString("finish_date");
+
+                                if (row.has("id")) {
+                                    ids[i] = row.getString("id");
+                                } else {
+                                    ids[i] = "";
+                                }
+
+                                if (row.has("subject")) {
+                                    subjects[i] = row.getString("subject");
+                                } else {
+                                    subjects[i] = "";
+                                }
+
+                                if (row.has("description")) {
+                                    descriptions[i] = row.getString("description");
+                                } else {
+                                    descriptions[i] = "";
+                                }
+
+                                if (row.has("url")) {
+                                    urls[i] = row.getString("url");
+                                } else {
+                                    urls[i] = "";
+                                }
+
+                                if (row.has("finish_date")) {
+                                    finish_dates[i] = row.getString("finish_date");
+                                } else {
+                                    finish_dates[i] = "";
+                                }
+
                                 imageIds[i] = R.drawable.ic_launcher;
 
                                 if (row.has("user")) {
@@ -224,22 +250,54 @@ public class MainActivity extends FragmentActivity {
                             final String[] urls = new String[array_length];
                             final String[] finish_dates = new String[array_length];
                             final String[] users = new String[array_length];
-                            final Integer[] imageId = new Integer[array_length];
+                            final Integer[] imageIds = new Integer[array_length];
 
                             for (int i = 0; i < array_length; i++) {
                                 JSONObject row = obj_array.getJSONObject(i);
-                                ids[i] = row.getString("id");
-                                subjects[i] = row.getString("subject");
-                                descriptions[i] = row.getString("description");
-                                urls[i] = row.getString("url");
-                                finish_dates[i] = row.getString("finish_date");
-                                imageId[i] = R.drawable.ic_launcher;
+
+                                if (row.has("id")) {
+                                    ids[i] = row.getString("id");
+                                } else {
+                                    ids[i] = "";
+                                }
+
+                                if (row.has("subject")) {
+                                    subjects[i] = row.getString("subject");
+                                } else {
+                                    subjects[i] = "";
+                                }
+
+                                if (row.has("description")) {
+                                    descriptions[i] = row.getString("description");
+                                } else {
+                                    descriptions[i] = "";
+                                }
+
+                                if (row.has("url")) {
+                                    urls[i] = row.getString("url");
+                                } else {
+                                    urls[i] = "";
+                                }
+
+                                if (row.has("finish_date")) {
+                                    finish_dates[i] = row.getString("finish_date");
+                                } else {
+                                    finish_dates[i] = "";
+                                }
+
+                                imageIds[i] = R.drawable.ic_launcher;
 
                                 if (row.has("user")) {
                                     users[i] = row.getString("user");
                                 } else {
                                     users[i] = "";
                                 }
+
+                                /*if (row.has("has_taken")) {
+                                    has_takens[i] = row.getString("has_taken");
+                                } else {
+                                    has_takens[i] = "";
+                                }*/
                             }
 
                             Log.d(JSON_TAG, "Successful parse data: " + subjects.toString());
@@ -250,15 +308,25 @@ public class MainActivity extends FragmentActivity {
                                 @Override
                                 public void onItemClick(
                                         AdapterView<?> parent, View view, int position, long id) {
-                                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
 
-                                    Intent intent = new Intent(getActivity(), FormActivity.class);
-                                    intent.putExtra(EXTRA_MESSAGE_LOTTERY, ids[position]);
-                                    intent.putExtra(EXTRA_MESSAGE_SUBJECT, subjects[position]);
-                                    intent.putExtra(EXTRA_MESSAGE_URL, urls[position]);
-                                    startActivity(intent);
+                                    WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+                                    String macAddress = wm.getConnectionInfo().getMacAddress();
+                                    if ( macAddress == null || macAddress.isEmpty() ) {
+                                        macAddress = "FAKE_USER";
+                                    }
 
-                                    Log.i(EVENT_TAG, "Show form activity.");
+                                    if ( macAddress.equals(users[position]) ) {
+                                        Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
+
+                                        Intent intent = new Intent(getActivity(), FormActivity.class);
+                                        intent.putExtra(EXTRA_MESSAGE_LOTTERY, ids[position]);
+                                        intent.putExtra(EXTRA_MESSAGE_SUBJECT, subjects[position]);
+                                        intent.putExtra(EXTRA_MESSAGE_URL, urls[position]);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(getActivity(), "You not the winner.", Toast.LENGTH_SHORT).show();
+                                        Log.i(EVENT_TAG, "You are not the winner.");
+                                    }
                                 }
                             });
 

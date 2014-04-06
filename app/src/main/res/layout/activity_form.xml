@@ -43,7 +43,7 @@
             android:inputType="textPersonName"
             android:hint="Name"
             android:ems="10"
-            android:id="@+id/editText" />
+            android:id="@+id/textPersonName" />
 
         <EditText
             android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:inputType="textEmailAddress"
             android:hint="Email"
             android:ems="10"
-            android:id="@+id/editText2" />
+            android:id="@+id/textEmailAddress" />
 
         <EditText
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
             android:inputType="phone"
             android:hint="Phone number"
             android:ems="10"
-            android:id="@+id/editText3" />
+            android:id="@+id/textPhone" />
 
         <EditText
             android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             android:inputType="textPostalAddress"
             android:hint="Post address"
             android:ems="10"
-            android:id="@+id/editText4" />
+            android:id="@+id/textPostalAddress" />
 
         <LinearLayout
             android:orientation="horizontal"

@@ -110,7 +110,7 @@ public class LotteryDescriptionActivity extends FragmentActivity {
 
                     JSONObject obj = new JSONObject();
                     obj.put("lottery", id);
-                    //obj.put("user", user);
+                    obj.put("user", user);
 
                     json = new StringEntity(obj.toString());
                     Log.i(JSON_TAG, obj.toString());
