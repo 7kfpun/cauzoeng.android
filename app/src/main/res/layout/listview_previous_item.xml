@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
     <TableRow>
         <TextView
@@ -12,18 +12,9 @@
             android:paddingBottom="4dp"
             android:textStyle="bold"
             android:text="Subject" />
-
-        <TextView
-            android:id="@+id/winner"
-            android:layout_width="fill_parent"
-            android:text="Winner from"
-            android:padding="0dp"
-            android:gravity="right"
-            android:layout_height="20dp"
-            android:layout_weight="1.0" />
     </TableRow>
 
-    <TableRow >
+    <TableRow>
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
@@ -31,14 +22,31 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Description" />
+    </TableRow>
 
+    <TableRow
+        android:gravity="right">
         <TextView
             android:id="@+id/finish_date"
-            android:layout_width="fill_parent"
-            android:text="Finish on"
-            android:padding="0dp"
-            android:gravity="right"
-            android:layout_height="20dp"
-            android:layout_weight="1.0" />
+            android:layout_width="wrap_content"
+            android:text="Finish date"
+            android:textSize="10dp"
+            android:gravity="right"/>
+    </TableRow>
+
+    <TableRow
+        android:gravity="right">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Winner from "
+            android:textSize="10dp"
+            android:gravity="right"/>
+
+        <TextView
+            android:id="@+id/winner"
+            android:layout_width="wrap_content"
+            android:text="Count"
+            android:textSize="10dp"
+            android:gravity="right"/>
     </TableRow>
 </TableLayout>
