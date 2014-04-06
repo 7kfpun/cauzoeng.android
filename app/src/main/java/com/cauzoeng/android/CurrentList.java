@@ -8,17 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomList extends ArrayAdapter<String>{
+public class CurrentList extends ArrayAdapter<String>{
     private final Activity context;
     private final String[] subjects;
     private final String[] descriptions;
     private final String[] finish_dates;
     private final int[] imageIds;
 
-    public CustomList(Activity context,
-                      String[] subject, String[] description,
-                      String[] finish_date, int[] imageId) {
-        super(context, R.layout.listview_detailed_item, subject);
+    public CurrentList(Activity context,
+                       String[] subject, String[] description,
+                       String[] finish_date, int[] imageId) {
+        super(context, R.layout.listview_current_item, subject);
         this.context = context;
 
         this.subjects = subject;
@@ -30,7 +30,7 @@ public class CustomList extends ArrayAdapter<String>{
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.listview_detailed_item, null, true);
+        View rowView = inflater.inflate(R.layout.listview_current_item, null, true);
         TextView txtSubject = (TextView) rowView.findViewById(R.id.subject);
         TextView txtDescription = (TextView) rowView.findViewById(R.id.description);
         TextView txtFinishDate = (TextView) rowView.findViewById(R.id.finish_date);

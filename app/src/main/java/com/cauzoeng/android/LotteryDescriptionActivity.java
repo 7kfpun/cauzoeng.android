@@ -36,20 +36,26 @@ import java.util.HashMap;
 
 public class LotteryDescriptionActivity extends FragmentActivity {
 
+    private static final String JSON_TAG = "JSON";
+    private static final String HTTP_TAG = "HTTP";
+
+    public final static String LOTTERY_BET_API_URL = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/bet/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
 
-        setContentView(R.layout.activity_lottery);
-        TextView dummyTextView = (TextView) findViewById(R.id.hello);
-        dummyTextView.setText("I am a hello text");
-
         Intent intent = getIntent();
         final String id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_LOTTERY);
+        String subject = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_SUBJECT);
         String url = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_URL);
-        Log.d("INTENT", "lottery id: " + id + ", url: " + url);
+        Log.d("INTENT", "lottery id: " + id + ", subject: " + subject + ", url: " + url);
+
+        setContentView(R.layout.activity_lottery);
+        TextView subjectTextView = (TextView) findViewById(R.id.subject);
+        subjectTextView.setText(subject);
 
         WebViewClient myWebClient = new WebViewClient()
         {
@@ -89,7 +95,7 @@ public class LotteryDescriptionActivity extends FragmentActivity {
 
             @Override
             public void onClick(View v) {
-                Log.i("POST BET", "Click post!!");
+                Log.i(HTTP_TAG, "Click post!!");
                 /*HashMap<String, String> paramMap = new HashMap<String, String>();
                 paramMap.put("id", id);
                 paramMap.put("user", "fake user");
@@ -109,19 +115,19 @@ public class LotteryDescriptionActivity extends FragmentActivity {
                     obj.put("user", user);
 
                     json = new StringEntity(obj.toString());
-                    Log.i("JSON Parser", obj.toString());
+                    Log.i(JSON_TAG, obj.toString());
 
                 } catch (UnsupportedEncodingException e) {
-                    Log.e("JSON Parser", "UnsupportedEncodingException " + e.toString());
+                    Log.e(JSON_TAG, "UnsupportedEncodingException " + e.toString());
                 } catch (JSONException e) {
-                    Log.e("JSON Parser", "Error parsing data " + e.toString());
+                    Log.e(JSON_TAG, "Error parsing data " + e.toString());
                 }
 
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.post(null, "https://cauzoeng.appspot.com/_ah/api/lottery/v1/bet/", null, json, "application/json", new JsonHttpResponseHandler() {
+                client.post(null, LOTTERY_BET_API_URL, null, json, "application/json", new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(String response) {
-                        Log.i("POST BET", "Post http" + response);
+                        Log.i(HTTP_TAG, "Post http" + response);
                     }
                 });
             }

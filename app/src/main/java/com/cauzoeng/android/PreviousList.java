@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PreviousList extends ArrayAdapter<String>{
@@ -18,7 +17,7 @@ public class PreviousList extends ArrayAdapter<String>{
     public PreviousList(Activity context,
                         String[] subjects, String[] descriptions,
                         String[] finish_dates, String[] winners) {
-        super(context, R.layout.listview_detailed_item, subjects);
+        super(context, R.layout.listview_current_item, subjects);
         this.context = context;
 
         this.subjects = subjects;

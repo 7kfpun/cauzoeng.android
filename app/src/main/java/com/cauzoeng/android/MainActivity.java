@@ -48,6 +48,7 @@ public class MainActivity extends FragmentActivity {
     private static final String HTTP_TAG = "HTTP";
 
     public final static String EXTRA_MESSAGE_LOTTERY = "0";
+    public final static String EXTRA_MESSAGE_SUBJECT = "dummy subject";
     public final static String EXTRA_MESSAGE_URL = "http://www.google.com";
 
     public final static String LOTTERY_API_URL = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
@@ -151,8 +152,8 @@ public class MainActivity extends FragmentActivity {
 
                             Log.d(JSON_TAG, "Successful parse data: " + subjects.toString());
 
-                            CustomList adapter = new CustomList(
-                                 getActivity(), subjects, descriptions, finish_dates, imageIds);
+                            CurrentList adapter = new CurrentList(
+                                    getActivity(), subjects, descriptions, finish_dates, imageIds);
                             list.setAdapter(adapter);
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -162,6 +163,7 @@ public class MainActivity extends FragmentActivity {
 
                                     Intent intent = new Intent(getActivity(), LotteryDescriptionActivity.class);
                                     intent.putExtra(EXTRA_MESSAGE_LOTTERY, ids[position]);
+                                    intent.putExtra(EXTRA_MESSAGE_SUBJECT, subjects[position]);
                                     intent.putExtra(EXTRA_MESSAGE_URL, urls[position]);
                                     startActivity(intent);
 
@@ -193,7 +195,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_1_previous, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_main_1_previous, container, false);
             final ListView list = (ListView) rootView.findViewById(R.id.previousListView);
 
             AsyncHttpClient client = new AsyncHttpClient();
@@ -244,6 +246,21 @@ public class MainActivity extends FragmentActivity {
 
                             PreviousList adapter = new PreviousList(getActivity(), subjects, descriptions, finish_dates, users);
                             list.setAdapter(adapter);
+                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(
+                                        AdapterView<?> parent, View view, int position, long id) {
+                                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
+
+                                    Intent intent = new Intent(getActivity(), FormActivity.class);
+                                    intent.putExtra(EXTRA_MESSAGE_LOTTERY, ids[position]);
+                                    intent.putExtra(EXTRA_MESSAGE_SUBJECT, subjects[position]);
+                                    intent.putExtra(EXTRA_MESSAGE_URL, urls[position]);
+                                    startActivity(intent);
+
+                                    Log.i(EVENT_TAG, "Show form activity.");
+                                }
+                            });
 
                         } catch (Throwable t) {
                             Log.e(JSON_TAG, "Unknown: " + t.getMessage());
@@ -251,6 +268,7 @@ public class MainActivity extends FragmentActivity {
                     }
                 }
             });
+
             return rootView;
         }
 	}
@@ -399,7 +417,7 @@ public class MainActivity extends FragmentActivity {
                 public void onClick(View v) {
                     Log.i(EVENT_TAG, "click open popup http");
 
-                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup_form, null);
+                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.activity_form, null);
                     final PopupWindow mpopup = new PopupWindow(
                             popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
                     mpopup.setAnimationStyle(android.R.style.Animation_Dialog);

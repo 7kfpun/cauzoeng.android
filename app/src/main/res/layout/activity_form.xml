@@ -8,11 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#ffffff">
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
@@ -22,11 +17,31 @@
         android:layout_alignParentStart="true"
         android:weightSum="1">
 
+
+        <TextView
+            android:text="You are lucky man!!"
+            android:textSize="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:lines="3"
+            android:text="You got a price. Please fill the form and send us back. We will send the price to you soon."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/subject"
+            android:text="Subject"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Name"
+            android:hint="Name"
             android:ems="10"
             android:id="@+id/editText" />
 
@@ -34,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
+            android:hint="Email"
             android:ems="10"
             android:id="@+id/editText2" />
 
@@ -41,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
+            android:hint="Phone number"
             android:ems="10"
             android:id="@+id/editText3" />
 
@@ -48,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPostalAddress"
+            android:hint="Post address"
             android:ems="10"
             android:id="@+id/editText4" />
 
@@ -60,15 +78,9 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Button"
+                android:text="Send"
                 android:id="@+id/button" />
         </LinearLayout>
-
-        <WebView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/webView"
-            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 
