@@ -37,6 +37,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <ImageButton
+            android:layout_width="88dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton"
+            android:layout_weight="0.46" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,6 +87,13 @@
                 android:text="Send"
                 android:id="@+id/button" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_weight="0.34"
+            android:src="@drawable/ic_launcher" />
 
     </LinearLayout>
 

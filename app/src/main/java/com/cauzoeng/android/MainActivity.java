@@ -1,9 +1,11 @@
 package com.cauzoeng.android;
 
-import java.util.HashMap;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
+import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
@@ -27,6 +29,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -52,8 +55,9 @@ public class MainActivity extends FragmentActivity {
     public final static String EXTRA_MESSAGE_URL = "http://www.google.com";
 
     public final static String LOTTERY_API_URL = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/lottery/";
+    public final static String LOTTERY_USER_API_URL = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/user/";
 
-	private static final int NUMBER_OF_PAGES = 4;
+    private static final int NUMBER_OF_PAGES = 4;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -368,42 +372,56 @@ public class MainActivity extends FragmentActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_3_about, container, false);
-            TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-            dummyTextView.setText("Home section.............");
+            final View rootView = inflater.inflate(R.layout.activity_form, container, false);
 
-            Button clickGetButton = (Button) rootView.findViewById(R.id.button1);
-            Button clickPostButton = (Button) rootView.findViewById(R.id.button2);
+            Button clickPopupFormButton = (Button) rootView.findViewById(R.id.button);
 
-            clickGetButton.setOnClickListener( new OnClickListener() {
+            clickPopupFormButton.setOnClickListener( new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    Log.i(EVENT_TAG, "Click get!!");
-                    AsyncHttpClient client = new AsyncHttpClient();
-                    client.get("http://httpbin.org/get", new AsyncHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(String response) {
-                            Log.i(EVENT_TAG, "Get http" + response);
+                    Log.i(EVENT_TAG, "click send form");
+
+                    StringEntity json = null;
+                    try {
+                        WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+                        String macAddress = wm.getConnectionInfo().getMacAddress();
+                        if ( macAddress == null || macAddress.isEmpty() ) {
+                            macAddress = "FAKE_USER";
                         }
-                    });
-                }
-            });
 
-            clickPostButton.setOnClickListener( new OnClickListener() {
+                        EditText textPersonName = (EditText) rootView.findViewById(R.id.textPersonName);
+                        EditText textEmailAddress = (EditText) rootView.findViewById(R.id.textEmailAddress);
+                        EditText textPhone = (EditText) rootView.findViewById(R.id.textPhone);
+                        EditText textPostalAddress = (EditText) rootView.findViewById(R.id.textPostalAddress);
 
-                @Override
-                public void onClick(View v) {
-                    Log.i(EVENT_TAG, "Click post!!");
-                    HashMap<String, String> paramMap = new HashMap<String, String>();
-                    paramMap.put("key", "value");
-                    RequestParams params = new RequestParams(paramMap);
+                        JSONObject obj = new JSONObject();
+                        obj.put("mac", macAddress);
+                        obj.put("name", textPersonName.getText().toString());
+                        obj.put("email", textEmailAddress.getText().toString());
+                        obj.put("phone", textPhone.getText().toString());
+                        obj.put("address", textPostalAddress.getText().toString());
+
+                        json = new StringEntity(obj.toString());
+                        Log.i(JSON_TAG, obj.toString());
+
+                    } catch (UnsupportedEncodingException e) {
+                        Log.e(JSON_TAG, "UnsupportedEncodingException " + e.toString());
+                    } catch (JSONException e) {
+                        Log.e(JSON_TAG, "Error parsing data " + e.toString());
+                    }
 
                     AsyncHttpClient client = new AsyncHttpClient();
-                    client.post("http://httpbin.org/post", params, new AsyncHttpResponseHandler() {
+                    client.post(null, LOTTERY_USER_API_URL, null, json, "application/json", new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(String response) {
-                            Log.i(EVENT_TAG, "Post http" + response);
+                            Toast.makeText(getActivity().getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Throwable e, String response) {
+                            Log.e(HTTP_TAG, "Bet failure: " + response.toString());
+                            Toast.makeText(getActivity().getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -450,7 +468,7 @@ public class MainActivity extends FragmentActivity {
                         public boolean shouldOverrideUrlLoading(WebView  view, String  url)
                         {
                             // This line we let me load only pages inside "com" Webpage
-                            if ( url.contains("com") == true )
+                            if ( url.contains("com") )
                                 //Load new URL Don't override URL Link
                                 return false;
 
@@ -489,7 +507,7 @@ public class MainActivity extends FragmentActivity {
                             mpopup.dismiss();
                         }
                     });
-                };
+                }
             });
 
             Button clickPopupFormButton = (Button) rootView.findViewById(R.id.button2);
@@ -511,7 +529,7 @@ public class MainActivity extends FragmentActivity {
                         public boolean shouldOverrideUrlLoading(WebView  view, String  url)
                         {
                             // This line we let me load only pages inside "com" Webpage
-                            if ( url.contains("com") == true )
+                            if ( url.contains("com") )
                                 //Load new URL Don't override URL Link
                                 return false;
 
@@ -530,7 +548,7 @@ public class MainActivity extends FragmentActivity {
                     } catch (Exception e) {
                         Log.e(EVENT_TAG, "Web open " + e.toString());
                     }
-                };
+                }
             });
 
             return rootView;
@@ -645,4 +663,5 @@ public class MainActivity extends FragmentActivity {
 			return null;
 		}
 	}
+
 }
