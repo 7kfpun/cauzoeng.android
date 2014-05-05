@@ -32,12 +32,6 @@ import java.io.UnsupportedEncodingException;
 
 public class FormActivity extends FragmentActivity {
 
-    private static final String JSON_TAG = "JSON";
-    private static final String HTTP_TAG = "HTTP";
-    private static final String EVENT_TAG = "EVENT";
-
-    public final static String LOTTERY_USER_API_URL = "https://cauzoeng.appspot.com/_ah/api/lottery/v1/user/";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +41,9 @@ public class FormActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         Intent intent = getIntent();
-        final String id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_LOTTERY);
-        String subject = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_SUBJECT);
-        String url = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_URL);
+        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_LOTTERY);
+        String subject = intent.getStringExtra(Constants.EXTRA_MESSAGE_SUBJECT);
+        String url = intent.getStringExtra(Constants.EXTRA_MESSAGE_URL);
         Log.d("INTENT", "lottery id: " + id + ", subject: " + subject + ", url: " + url);
 
         TextView subjectTextView = (TextView) findViewById(R.id.subject);
@@ -60,7 +54,7 @@ public class FormActivity extends FragmentActivity {
 
             @Override
             public void onClick(View v) {
-                Log.i(EVENT_TAG, "click send form");
+                Log.i(Constants.EVENT_TAG, "click send form");
 
                 StringEntity json = null;
                 try {
@@ -83,16 +77,16 @@ public class FormActivity extends FragmentActivity {
                     obj.put("address", textPostalAddress.getText().toString());
 
                     json = new StringEntity(obj.toString());
-                    Log.i(JSON_TAG, obj.toString());
+                    Log.i(Constants.JSON_TAG, obj.toString());
 
                 } catch (UnsupportedEncodingException e) {
-                    Log.e(JSON_TAG, "UnsupportedEncodingException " + e.toString());
+                    Log.e(Constants.JSON_TAG, "UnsupportedEncodingException " + e.toString());
                 } catch (JSONException e) {
-                    Log.e(JSON_TAG, "Error parsing data " + e.toString());
+                    Log.e(Constants.JSON_TAG, "Error parsing data " + e.toString());
                 }
 
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.post(null, LOTTERY_USER_API_URL, null, json, "application/json", new AsyncHttpResponseHandler() {
+                client.post(null, Constants.LOTTERY_USER_API_URL, null, json, "application/json", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(String response) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
@@ -100,7 +94,7 @@ public class FormActivity extends FragmentActivity {
 
                     @Override
                     public void onFailure(Throwable e, String response) {
-                        Log.e(HTTP_TAG, "Bet failure: " + response.toString());
+                        Log.e(Constants.HTTP_TAG, "Bet failure: " + response.toString());
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -108,11 +102,11 @@ public class FormActivity extends FragmentActivity {
         });
     }
 
-        @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
