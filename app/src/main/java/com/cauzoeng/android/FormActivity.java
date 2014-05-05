@@ -1,22 +1,17 @@
 package com.cauzoeng.android;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,10 +59,10 @@ public class FormActivity extends FragmentActivity {
                         macAddress = "FAKE_USER";
                     }
 
-                    EditText textPersonName = (EditText)findViewById(R.id.textPersonName);
+                    EditText textPersonName = (EditText)findViewById(R.id.textItem);
                     EditText textEmailAddress = (EditText)findViewById(R.id.textEmailAddress);
                     EditText textPhone = (EditText)findViewById(R.id.textPhone);
-                    EditText textPostalAddress = (EditText)findViewById(R.id.textPostalAddress);
+                    EditText textPostalAddress = (EditText)findViewById(R.id.editTextDescription);
 
                     JSONObject obj = new JSONObject();
                     obj.put("mac", macAddress);

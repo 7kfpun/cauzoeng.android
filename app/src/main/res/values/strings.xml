@@ -10,5 +10,34 @@
     <string name="title_section3">About</string>
     <string name="title_activity_lottery">LotteryActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="radio_very_old">very old</string>
+    <string name="radio_old">old</string>
+    <string name="radio_new">new</string>
+    <string name="radio_very_new">very new</string>
+
+    <string-array name="currency_arrays">
+        <item>DZD</item>
+        <item>EGP</item>
+        <item>ERN</item>
+        <item>ETB</item>
+        <item>EUR</item>
+        <item>FJD</item>
+        <item>FKP</item>
+        <item>GBP</item>
+        <item>GEL</item>
+        <item>GGP</item>
+        <item>GHS</item>
+        <item>GIP</item>
+        <item>GMD</item>
+        <item>GNF</item>
+        <item>GTQ</item>
+        <item>GYD</item>
+        <item>HKD</item>
+        <item>HNL</item>
+        <item>HRK</item>
+        <item>HTG</item>
+        <item>HUF</item>
+        <item>IDR</item>
+    </string-array>
 
 </resources>
