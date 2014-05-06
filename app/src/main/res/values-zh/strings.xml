@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="action_edit">更改</string>
+    <string name="title_section2">地圖</string>
+    <string name="radio_new">新</string>
+    <string name="radio_old">舊</string>
+
+</resources>

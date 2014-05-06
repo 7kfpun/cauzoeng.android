@@ -31,19 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:lines="3"
-            android:text="You got a price. Please fill the form and send us back. We will send the price to you soon."
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/subject"
-            android:text="Subject"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
         <ImageButton
             android:layout_width="88dp"
             android:layout_height="wrap_content"
@@ -76,7 +63,8 @@
                 android:layout_width="87dp"
                 android:layout_height="match_parent"
                 android:id="@+id/spinner"
-                android:entries="@array/currency_arrays" />
+                android:entries="@array/currency_arrays"
+                android:layout_weight="0.59" />
 
         </LinearLayout>
 
@@ -97,44 +85,57 @@
             android:textOff="Second hand"
             android:textOn="Total new" />
 
-        <RadioGroup
-            android:id="@+id/radioSex"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/radioMale"
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:id="@+id/radioSex"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/radio_very_old"
-                android:checked="true" />
+                android:orientation="horizontal" >
 
-            <RadioButton
-                android:id="@+id/radioMale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/radio_old" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Very old"
+                    android:id="@+id/textView2" />
 
-            <RadioButton
-                android:id="@+id/radioMale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/radio_new" />
+                <RadioButton
+                    android:id="@+id/radioVeryOld"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <RadioButton
-                android:id="@+id/radioFemale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/radio_very_new" />
+                <RadioButton
+                    android:id="@+id/radioOld"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
 
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/seekBar"
-            android:layout_gravity="center_horizontal" />
+                <RadioButton
+                    android:id="@+id/radioNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RadioButton
+                    android:id="@+id/radioVeryNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Very new"
+                    android:id="@+id/textView" />
+
+            </RadioGroup>
+        </LinearLayout>
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -176,13 +177,6 @@
                 android:text="Send"
                 android:id="@+id/button" />
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:layout_weight="0.34"
-            android:src="@drawable/ic_launcher" />
 
     </LinearLayout>
 
