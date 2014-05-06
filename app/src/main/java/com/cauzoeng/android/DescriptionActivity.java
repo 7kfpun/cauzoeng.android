@@ -1,29 +1,13 @@
 package com.cauzoeng.android;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import org.apache.http.entity.StringEntity;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 
 public class DescriptionActivity extends FragmentActivity {
@@ -36,93 +20,23 @@ public class DescriptionActivity extends FragmentActivity {
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
 
         Intent intent = getIntent();
-        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_LOTTERY);
-        String subject = intent.getStringExtra(Constants.EXTRA_MESSAGE_SUBJECT);
-        String url = intent.getStringExtra(Constants.EXTRA_MESSAGE_URL);
-        Log.d("INTENT", "lottery id: " + id + ", subject: " + subject + ", url: " + url);
+        String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+        String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
+        Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
+        String currency = intent.getStringExtra(Constants.EXTRA_MESSAGE_CURRENCY);
+        String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);
+        Log.d("INTENT", "lottery id: " + id + ", title: " + title);
 
-        setContentView(R.layout.activity_lottery);
-        TextView subjectTextView = (TextView) findViewById(R.id.subject);
-        subjectTextView.setText(subject);
+        setContentView(R.layout.description);
+        TextView titleTextView = (TextView) findViewById(R.id.textTitle);
+        titleTextView.setText(title);
+        TextView priceTextView = (TextView) findViewById(R.id.textPrice);
+        priceTextView.setText(price.toString());
+        TextView currencyTextView = (TextView) findViewById(R.id.textCurrency);
+        currencyTextView.setText(currency);
+        TextView descriptionTextView = (TextView) findViewById(R.id.textDescription);
+        descriptionTextView.setText(description);
 
-        WebViewClient myWebClient = new WebViewClient()
-        {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView  view, String  url)
-            {
-            // This line we let me load only pages inside "com" Webpage
-            if ( url.contains("com") )
-                //Load new URL Don't override URL Link
-                return false;
-
-            return true;
-            }
-        };
-
-        WebView webView = (WebView) findViewById(R.id.webView);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setSupportZoom(true);
-        webView.setWebViewClient(myWebClient);
-
-        webView.loadUrl(url);
-
-        /*Lottery.Builder builder = new Lottery.Builder(
-                AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
-        service = builder.build();*/
-
-        Button clickPostButton = (Button) findViewById(R.id.bet_button);
-
-        clickPostButton.setOnClickListener( new View.OnClickListener() {
-            /* curl -X POST localhost:8080/_ah/api/lottery/v1/bet/
-            -d '{"user": "", "lottery": ""}' -H "Content-Type: application/json""
-             */
-
-            @Override
-            public void onClick(View v) {
-                Log.i(Constants.HTTP_TAG, "Click post!!");
-                /*HashMap<String, String> paramMap = new HashMap<String, String>();
-                paramMap.put("id", id);
-                paramMap.put("user", "fake user");
-                RequestParams params = new RequestParams(paramMap);*/
-
-                StringEntity json = null;
-                try {
-                    WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                    String macAddress = wm.getConnectionInfo().getMacAddress();
-                    String user = "FAKE_USER";
-                    if (macAddress != null && !macAddress.isEmpty()) {
-                        user = macAddress;
-                    }
-
-                    JSONObject obj = new JSONObject();
-                    obj.put("lottery", id);
-                    obj.put("user", user);
-
-                    json = new StringEntity(obj.toString());
-                    Log.i(Constants.JSON_TAG, obj.toString());
-
-                } catch (UnsupportedEncodingException e) {
-                    Log.e(Constants.JSON_TAG, "UnsupportedEncodingException " + e.toString());
-                } catch (JSONException e) {
-                    Log.e(Constants.JSON_TAG, "Error parsing data " + e.toString());
-                }
-
-                AsyncHttpClient client = new AsyncHttpClient();
-                client.post(null, Constants.LOTTERY_BET_API_URL, null, json, "application/json", new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable e, String response) {
-                        Log.e(Constants.HTTP_TAG, "Bet failure: " + response.toString());
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
     }
 
     @Override

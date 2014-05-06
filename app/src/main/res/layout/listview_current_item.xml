@@ -17,7 +17,7 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/subject"
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:textStyle="bold"
                     android:text="Title" />
@@ -44,9 +44,9 @@
             <TableRow
                 android:gravity="right">
                 <TextView
-                    android:id="@+id/finish_date"
+                    android:id="@+id/created_date"
                     android:layout_width="wrap_content"
-                    android:text="Finish date"
+                    android:text="Created date"
                     android:textSize="10dp"
                     android:gravity="right"/>
             </TableRow>
@@ -54,9 +54,9 @@
             <TableRow
                 android:gravity="right">
                 <TextView
-                    android:id="@+id/count"
+                    android:id="@+id/available_days"
                     android:layout_width="wrap_content"
-                    android:text="Count"
+                    android:text="Available days"
                     android:textSize="10dp"
                     android:gravity="right"/>
             </TableRow>

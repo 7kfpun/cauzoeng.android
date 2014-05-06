@@ -26,8 +26,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LotteryDescriptionActivity"
-            android:label="LotteryDescriptionActivity"
+            android:name=".DescriptionActivity"
+            android:label="DescriptionActivity"
             android:parentActivityName="com.cauzoeng.android.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -4,7 +4,6 @@ package com.cauzoeng.android;
 import java.util.Locale;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
@@ -97,10 +96,10 @@ public class MainActivity extends FragmentActivity {
             final ListView list = (ListView) rootView.findViewById(R.id.list);
 
             AsyncHttpClient client = new AsyncHttpClient();
-            client.get(Constants.LOTTERY_API_URL, new AsyncHttpResponseHandler() {
+            client.get(Constants.ITEM_API_URL, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
-                    Log.i(Constants.HTTP_TAG, "Get http" + response);
+                    Log.i(Constants.HTTP_TAG, "Get item api" + response);
 
                     JSONObject obj = null;
                     JSONArray obj_array = null;
@@ -117,11 +116,11 @@ public class MainActivity extends FragmentActivity {
                             int array_length = obj_array.length();
 
                             final String[] ids = new String[array_length];
-                            final String[] subjects = new String[array_length];
+                            final String[] titles = new String[array_length];
                             final Double[] prices = new Double[array_length];
+                            final String[] currencies = new String[array_length];
                             final String[] descriptions = new String[array_length];
-                            final String[] urls = new String[array_length];
-                            final String[] finish_dates = new String[array_length];
+                            final String[] created_dates = new String[array_length];
                             final String[] users = new String[array_length];
                             final int[] imageIds = new int[array_length];
 
@@ -134,10 +133,10 @@ public class MainActivity extends FragmentActivity {
                                     ids[i] = "";
                                 }
 
-                                if (row.has("subject")) {
-                                    subjects[i] = row.getString("subject");
+                                if (row.has("title")) {
+                                    titles[i] = row.getString("title");
                                 } else {
-                                    subjects[i] = "";
+                                    titles[i] = "";
                                 }
 
                                 if (row.has("price")) {
@@ -146,22 +145,22 @@ public class MainActivity extends FragmentActivity {
                                     prices[i] = 0.0;
                                 }
 
+                                if (row.has("currency")) {
+                                    currencies[i] = row.getString("currency");
+                                } else {
+                                    currencies[i] = "";
+                                }
+
                                 if (row.has("description")) {
                                     descriptions[i] = row.getString("description");
                                 } else {
                                     descriptions[i] = "";
                                 }
 
-                                if (row.has("url")) {
-                                    urls[i] = row.getString("url");
+                                if (row.has("created_date")) {
+                                    created_dates[i] = row.getString("created_date");
                                 } else {
-                                    urls[i] = "";
-                                }
-
-                                if (row.has("finish_date")) {
-                                    finish_dates[i] = row.getString("finish_date");
-                                } else {
-                                    finish_dates[i] = "";
+                                    created_dates[i] = "";
                                 }
 
                                 imageIds[i] = R.drawable.ic_launcher;
@@ -173,21 +172,24 @@ public class MainActivity extends FragmentActivity {
                                 }
                             }
 
-                            Log.d(Constants.JSON_TAG, "Successful parse data: " + subjects.toString());
+                            Log.d(Constants.JSON_TAG, "Successful parse data: " + titles.toString());
 
                             CurrentList adapter = new CurrentList(
-                                    getActivity(), subjects, prices, descriptions, finish_dates, imageIds);
+                                    getActivity(), titles, prices, currencies, descriptions,
+                                    created_dates, imageIds);
                             list.setAdapter(adapter);
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(
                                         AdapterView<?> parent, View view, int position, long id) {
-                                    Toast.makeText(getActivity(), "You Clicked at " + subjects[position], Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "You Clicked at " + titles[position], Toast.LENGTH_SHORT).show();
 
                                     Intent intent = new Intent(getActivity(), DescriptionActivity.class);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_LOTTERY, ids[position]);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_SUBJECT, subjects[position]);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_URL, urls[position]);
+                                    intent.putExtra(Constants.EXTRA_MESSAGE_ID, ids[position]);
+                                    intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, titles[position]);
+                                    intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, prices[position]);
+                                    intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, currencies[position]);
+                                    intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, descriptions[position]);
                                     startActivity(intent);
 
                                     Log.i(Constants.EVENT_TAG, "Start an activity.");

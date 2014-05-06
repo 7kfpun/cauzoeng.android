@@ -36,12 +36,12 @@ public class FormActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         Intent intent = getIntent();
-        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_LOTTERY);
-        String subject = intent.getStringExtra(Constants.EXTRA_MESSAGE_SUBJECT);
-        String url = intent.getStringExtra(Constants.EXTRA_MESSAGE_URL);
-        Log.d("INTENT", "lottery id: " + id + ", subject: " + subject + ", url: " + url);
+        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+        String subject = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
+        Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
+        Log.d("INTENT", "lottery id: " + id + ", subject: " + subject);
 
-        TextView subjectTextView = (TextView) findViewById(R.id.subject);
+        TextView subjectTextView = (TextView) findViewById(R.id.title);
         subjectTextView.setText(subject);
 
         Button clickPopupFormButton = (Button) findViewById(R.id.button);
