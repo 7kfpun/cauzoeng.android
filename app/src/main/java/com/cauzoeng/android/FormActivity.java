@@ -40,7 +40,7 @@ public class FormActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
         String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
         Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
         String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);
@@ -79,6 +79,9 @@ public class FormActivity extends FragmentActivity {
                     EditText textPostalAddress = (EditText)findViewById(R.id.editTextDescription);
 
                     JSONObject obj = new JSONObject();
+                    if (id != "") {
+                        obj.put("id", id);
+                    }
                     obj.put("user", macAddress);
 
                     obj.put("title", textItem.getText().toString());

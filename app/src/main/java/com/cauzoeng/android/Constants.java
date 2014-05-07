@@ -10,7 +10,7 @@ public class Constants {
     public static final String HTTP_TAG = "HTTP";
     public static final String FILE_TAG = "FILE";
 
-    public static final String EXTRA_MESSAGE_ID = "0";
+    public static final String EXTRA_MESSAGE_ID = "";
     public static final String EXTRA_MESSAGE_TITLE = "dummy subject";
     public static final String EXTRA_MESSAGE_PRICE = "dummy price";
     public static final String EXTRA_MESSAGE_CURRENCY = "dummy currency";
