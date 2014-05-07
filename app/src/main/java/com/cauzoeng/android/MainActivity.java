@@ -1,6 +1,7 @@
 package com.cauzoeng.android;
 
 
+import java.io.File;
 import java.util.Locale;
 
 import org.json.JSONArray;
@@ -34,6 +35,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.*;
+import com.github.kevinsawicki.http.HttpRequest;
+
+import java.lang.InterruptedException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * MainActivity.
@@ -95,113 +100,117 @@ public class MainActivity extends FragmentActivity {
             final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
             final ListView list = (ListView) rootView.findViewById(R.id.list);
 
-            AsyncHttpClient client = new AsyncHttpClient();
-            client.get(Constants.ITEM_API_URL, new AsyncHttpResponseHandler() {
-                @Override
-                public void onSuccess(String response) {
-                    Log.i(Constants.HTTP_TAG, "Get item api" + response);
+            String response = null;
 
-                    JSONObject obj = null;
-                    JSONArray obj_array = null;
+            try {
+                response = new DownloadItemTask().execute(Constants.ITEM_API_URL).get();
+                Log.i(Constants.HTTP_TAG, response);
+            } catch (ExecutionException e){
+
+            } catch (InterruptedException e) {
+
+            } finally {
+
+                JSONObject obj = null;
+                JSONArray obj_array = null;
+                try {
+                    obj = new JSONObject(response);
+                    obj_array = obj.getJSONArray("items");
+
+                    Log.d(Constants.JSON_TAG, "Parsed JSON: " + obj.toString());
+                } catch (Throwable t) {
+                    Log.e(Constants.JSON_TAG, "Could not parse JSON: " + t.getMessage());
+                } finally {
+
                     try {
-                        obj = new JSONObject(response);
-                        obj_array = obj.getJSONArray("items");
+                        int array_length = obj_array.length();
 
-                        Log.d(Constants.JSON_TAG, "Parsed JSON: " + obj.toString());
-                    } catch (Throwable t) {
-                        Log.e(Constants.JSON_TAG, "Could not parse JSON: " + t.getMessage());
-                    } finally {
+                        final String[] ids = new String[array_length];
+                        final String[] titles = new String[array_length];
+                        final Double[] prices = new Double[array_length];
+                        final String[] currencies = new String[array_length];
+                        final String[] descriptions = new String[array_length];
+                        final String[] created_dates = new String[array_length];
+                        final String[] users = new String[array_length];
+                        final int[] imageIds = new int[array_length];
 
-                        try {
-                            int array_length = obj_array.length();
+                        for (int i = 0; i < array_length; i++) {
+                            JSONObject row = obj_array.getJSONObject(i);
 
-                            final String[] ids = new String[array_length];
-                            final String[] titles = new String[array_length];
-                            final Double[] prices = new Double[array_length];
-                            final String[] currencies = new String[array_length];
-                            final String[] descriptions = new String[array_length];
-                            final String[] created_dates = new String[array_length];
-                            final String[] users = new String[array_length];
-                            final int[] imageIds = new int[array_length];
-
-                            for (int i = 0; i < array_length; i++) {
-                                JSONObject row = obj_array.getJSONObject(i);
-
-                                if (row.has("id")) {
-                                    ids[i] = row.getString("id");
-                                } else {
-                                    ids[i] = "";
-                                }
-
-                                if (row.has("title")) {
-                                    titles[i] = row.getString("title");
-                                } else {
-                                    titles[i] = "";
-                                }
-
-                                if (row.has("price")) {
-                                    prices[i] = row.getDouble("price");
-                                } else {
-                                    prices[i] = 0.0;
-                                }
-
-                                if (row.has("currency")) {
-                                    currencies[i] = row.getString("currency");
-                                } else {
-                                    currencies[i] = "";
-                                }
-
-                                if (row.has("description")) {
-                                    descriptions[i] = row.getString("description");
-                                } else {
-                                    descriptions[i] = "";
-                                }
-
-                                if (row.has("created_date")) {
-                                    created_dates[i] = row.getString("created_date");
-                                } else {
-                                    created_dates[i] = "";
-                                }
-
-                                imageIds[i] = R.drawable.ic_launcher;
-
-                                if (row.has("user")) {
-                                    users[i] = row.getString("user");
-                                } else {
-                                    users[i] = "";
-                                }
+                            if (row.has("id")) {
+                                ids[i] = row.getString("id");
+                            } else {
+                                ids[i] = "";
                             }
 
-                            Log.d(Constants.JSON_TAG, "Successful parse data: " + titles.toString());
+                            if (row.has("title")) {
+                                titles[i] = row.getString("title");
+                            } else {
+                                titles[i] = "";
+                            }
 
-                            CurrentList adapter = new CurrentList(
-                                    getActivity(), titles, prices, currencies, descriptions,
-                                    created_dates, imageIds);
-                            list.setAdapter(adapter);
-                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(
-                                        AdapterView<?> parent, View view, int position, long id) {
-                                    Toast.makeText(getActivity(), "You Clicked at " + titles[position], Toast.LENGTH_SHORT).show();
+                            if (row.has("price")) {
+                                prices[i] = row.getDouble("price");
+                            } else {
+                                prices[i] = 0.0;
+                            }
 
-                                    Intent intent = new Intent(getActivity(), DescriptionActivity.class);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_ID, ids[position]);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, titles[position]);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, prices[position]);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, currencies[position]);
-                                    intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, descriptions[position]);
-                                    startActivity(intent);
+                            if (row.has("currency")) {
+                                currencies[i] = row.getString("currency");
+                            } else {
+                                currencies[i] = "";
+                            }
 
-                                    Log.i(Constants.EVENT_TAG, "Start an activity.");
-                                }
-                            });
+                            if (row.has("description")) {
+                                descriptions[i] = row.getString("description");
+                            } else {
+                                descriptions[i] = "";
+                            }
 
-                        } catch (Throwable t) {
-                            Log.e(Constants.JSON_TAG, "Unknown: " + t.getMessage());
+                            if (row.has("created_date")) {
+                                created_dates[i] = row.getString("created_date");
+                            } else {
+                                created_dates[i] = "";
+                            }
+
+                            imageIds[i] = R.drawable.ic_launcher;
+
+                            if (row.has("user")) {
+                                users[i] = row.getString("user");
+                            } else {
+                                users[i] = "";
+                            }
                         }
+
+                        Log.d(Constants.JSON_TAG, "Successful parse data: " + titles.toString());
+
+                        CurrentList adapter = new CurrentList(
+                                getActivity(), titles, prices, currencies, descriptions,
+                                created_dates, imageIds);
+                        list.setAdapter(adapter);
+                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(
+                                    AdapterView<?> parent, View view, int position, long id) {
+                                Toast.makeText(getActivity(), "You Clicked at " + titles[position], Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+                                intent.putExtra(Constants.EXTRA_MESSAGE_ID, ids[position]);
+                                intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, titles[position]);
+                                intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, prices[position]);
+                                intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, currencies[position]);
+                                intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, descriptions[position]);
+                                startActivity(intent);
+
+                                Log.i(Constants.EVENT_TAG, "Start an activity.");
+                            }
+                        });
+
+                    } catch (Throwable t) {
+                        Log.e(Constants.JSON_TAG, "Unknown: " + t.getMessage());
                     }
                 }
-            });
+            }
 
             return rootView;
         }

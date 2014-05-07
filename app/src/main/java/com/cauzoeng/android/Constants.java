@@ -8,6 +8,7 @@ public class Constants {
     public static final String EVENT_TAG = "EVENT";
     public static final String JSON_TAG = "JSON";
     public static final String HTTP_TAG = "HTTP";
+    public static final String FILE_TAG = "FILE";
 
     public static final String EXTRA_MESSAGE_ID = "0";
     public static final String EXTRA_MESSAGE_TITLE = "dummy subject";

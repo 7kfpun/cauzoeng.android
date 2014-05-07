@@ -12,8 +12,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -41,7 +45,7 @@ public class FormActivity extends FragmentActivity {
         Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
         Log.d("INTENT", "lottery id: " + id + ", subject: " + subject);
 
-        TextView subjectTextView = (TextView) findViewById(R.id.title);
+        TextView subjectTextView = (TextView) findViewById(R.id.editTextItem);
         subjectTextView.setText(subject);
 
         Button clickPopupFormButton = (Button) findViewById(R.id.button);
@@ -59,17 +63,35 @@ public class FormActivity extends FragmentActivity {
                         macAddress = "FAKE_USER";
                     }
 
-                    EditText textPersonName = (EditText)findViewById(R.id.textItem);
+                    EditText textItem = (EditText)findViewById(R.id.editTextItem);
+                    EditText textPrice = (EditText)findViewById(R.id.editTextPrice);
+                    Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
+                    EditText textDescription = (EditText)findViewById(R.id.editTextDescription);
+
+                    ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
+                    RadioGroup radioConditionGroup = (RadioGroup) findViewById(R.id.radioCondition);
+                    int selectedId = radioConditionGroup.getCheckedRadioButtonId();
+                    RadioButton radioConditionButton = (RadioButton) findViewById(selectedId);
+
                     EditText textEmailAddress = (EditText)findViewById(R.id.textEmailAddress);
                     EditText textPhone = (EditText)findViewById(R.id.textPhone);
                     EditText textPostalAddress = (EditText)findViewById(R.id.editTextDescription);
 
                     JSONObject obj = new JSONObject();
-                    obj.put("mac", macAddress);
-                    obj.put("name", textPersonName.getText().toString());
-                    obj.put("email", textEmailAddress.getText().toString());
+                    obj.put("user", macAddress);
+
+                    obj.put("title", textItem.getText().toString());
+                    obj.put("price", textPrice.getText().toString());
+                    obj.put("currency", spinnerCurrency.getSelectedItem().toString());
+                    obj.put("description", textDescription.getText().toString());
+
+                    obj.put("second_hand", toggleButton.isChecked());
+                    obj.put("condition", radioConditionButton.getText().toString());
+                    obj.put("available_days", 15);
+
+                    /*obj.put("email", textEmailAddress.getText().toString());
                     obj.put("phone", textPhone.getText().toString());
-                    obj.put("address", textPostalAddress.getText().toString());
+                    obj.put("location", textPostalAddress.getText().toString());*/
 
                     json = new StringEntity(obj.toString());
                     Log.i(Constants.JSON_TAG, obj.toString());
@@ -81,15 +103,16 @@ public class FormActivity extends FragmentActivity {
                 }
 
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.post(null, Constants.LOTTERY_USER_API_URL, null, json, "application/json", new AsyncHttpResponseHandler() {
+                client.post(null, Constants.ITEM_API_URL, null, json, "application/json", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(String response) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
 
                     @Override
                     public void onFailure(Throwable e, String response) {
-                        Log.e(Constants.HTTP_TAG, "Bet failure: " + response.toString());
+                        Log.e(Constants.HTTP_TAG, "New item failure: " + response.toString());
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

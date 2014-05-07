@@ -13,171 +13,168 @@
         android:layout_height="wrap_content"
         android:id="@+id/scrollView">
 
-    </ScrollView>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:weightSum="1"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-
-
-        <TextView
-            android:text="You are lucky man!!"
-            android:textSize="25dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageButton
-            android:layout_width="88dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:layout_weight="0.46" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Name"
-            android:ems="10"
-            android:id="@+id/textItem" />
-
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1" >
+
+
+            <TextView
+                android:text="You are lucky man!!"
+                android:textSize="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:layout_width="88dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton"
+                android:layout_weight="0.46" />
 
             <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:hint="Price"
-                android:ems="10"
-                android:id="@+id/textPrice"
-                android:layout_weight="1" />
-
-            <Spinner
-                android:layout_width="87dp"
-                android:layout_height="match_parent"
-                android:id="@+id/spinner"
-                android:entries="@array/currency_arrays"
-                android:layout_weight="0.59" />
-
-        </LinearLayout>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:hint="Description"
-            android:maxLength="140"
-            android:ems="10"
-            android:id="@+id/editTextDescription" />
-
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Second hand"
-            android:id="@+id/toggleButton"
-            android:textOff="Second hand"
-            android:textOn="Total new" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioGroup
-                android:id="@+id/radioSex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:hint="Name"
+                android:id="@+id/editTextItem" />
 
-                <TextView
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Very old"
-                    android:id="@+id/textView2" />
+                    android:inputType="numberDecimal"
+                    android:hint="Price"
+                    android:id="@+id/editTextPrice"
+                    android:layout_weight="1" />
 
-                <RadioButton
-                    android:id="@+id/radioVeryOld"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <Spinner
+                    android:layout_width="87dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinnerCurrency"
+                    android:entries="@array/currency_arrays"
+                    android:layout_weight="0.59" />
 
-                <RadioButton
-                    android:id="@+id/radioOld"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-                <RadioButton
-                    android:id="@+id/radioNormal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:hint="Description"
+                android:maxLength="140"
+                android:id="@+id/editTextDescription" />
 
-                <RadioButton
-                    android:id="@+id/radioNew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <RadioButton
-                    android:id="@+id/radioVeryNew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Very new"
-                    android:id="@+id/textView" />
-
-            </RadioGroup>
-        </LinearLayout>
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show email?"
-            android:id="@+id/checkBoxEmail" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Email"
-            android:ems="10"
-            android:id="@+id/textEmailAddress" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show phone?"
-            android:id="@+id/checkBoxPhone" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="Phone number"
-            android:ems="10"
-            android:id="@+id/textPhone" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right">
-
-            <Button
+            <ToggleButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send"
-                android:id="@+id/button" />
+                android:text="Second hand"
+                android:id="@+id/toggleButton"
+                android:textOff="Second hand"
+                android:textOn="Total new" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioGroup
+                    android:id="@+id/radioCondition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Very old"
+                        android:id="@+id/textView2" />
+
+                    <RadioButton
+                        android:id="@+id/radioVeryOld"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VERY_OLD" />
+
+                    <RadioButton
+                        android:id="@+id/radioOld"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="OLD" />
+
+                    <RadioButton
+                        android:id="@+id/radioNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="NORMAL" />
+
+                    <RadioButton
+                        android:id="@+id/radioNew"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NEW" />
+
+                    <RadioButton
+                        android:id="@+id/radioVeryNew"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VERY_NEW" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Very new"
+                        android:id="@+id/textView" />
+
+                </RadioGroup>
+            </LinearLayout>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show email?"
+                android:id="@+id/checkBoxEmail" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="Email"
+                android:id="@+id/textEmailAddress"
+                android:visibility="gone" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show phone?"
+                android:id="@+id/checkBoxPhone" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:hint="Phone number"
+                android:id="@+id/textPhone"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send"
+                    android:id="@+id/button" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
