@@ -22,11 +22,11 @@ import android.widget.ToggleButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 
 public class FormActivity extends FragmentActivity {
@@ -40,16 +40,22 @@ public class FormActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         Intent intent = getIntent();
-        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
-        String subject = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
+        String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+        String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
         Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
-        Log.d("INTENT", "lottery id: " + id + ", subject: " + subject);
+        String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);
 
-        TextView subjectTextView = (TextView) findViewById(R.id.editTextItem);
-        subjectTextView.setText(subject);
+        final EditText textItem = (EditText)findViewById(R.id.editTextItem);
+        final EditText textPrice = (EditText)findViewById(R.id.editTextPrice);
+        final Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
+        final EditText textDescription = (EditText)findViewById(R.id.editTextDescription);
 
-        Button clickPopupFormButton = (Button) findViewById(R.id.button);
-        clickPopupFormButton.setOnClickListener( new View.OnClickListener() {
+        textItem.setText(title);
+        textPrice.setText(price.toString());
+        textDescription.setText(description);
+
+        Button submitFormButton = (Button) findViewById(R.id.button);
+        submitFormButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -62,11 +68,6 @@ public class FormActivity extends FragmentActivity {
                     if ( macAddress == null || macAddress.isEmpty() ) {
                         macAddress = "FAKE_USER";
                     }
-
-                    EditText textItem = (EditText)findViewById(R.id.editTextItem);
-                    EditText textPrice = (EditText)findViewById(R.id.editTextPrice);
-                    Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
-                    EditText textDescription = (EditText)findViewById(R.id.editTextDescription);
 
                     ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
                     RadioGroup radioConditionGroup = (RadioGroup) findViewById(R.id.radioCondition);
@@ -116,7 +117,7 @@ public class FormActivity extends FragmentActivity {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-            };
+            }
         });
     }
 
@@ -134,10 +135,7 @@ public class FormActivity extends FragmentActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
 }

@@ -1,12 +1,6 @@
 package com.cauzoeng.android;
 
 
-import java.io.File;
-import java.util.Locale;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.Intent;
@@ -34,11 +28,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.*;
-import com.github.kevinsawicki.http.HttpRequest;
-
 import java.lang.InterruptedException;
 import java.util.concurrent.ExecutionException;
+import java.util.Locale;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 /**
  * MainActivity.

@@ -36,7 +36,6 @@ public class DescriptionActivity extends FragmentActivity {
         currencyTextView.setText(currency);
         TextView descriptionTextView = (TextView) findViewById(R.id.textDescription);
         descriptionTextView.setText(description);
-
     }
 
     @Override
@@ -44,6 +43,23 @@ public class DescriptionActivity extends FragmentActivity {
         
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.item, menu);
+
+        Intent intent = getIntent();
+        String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+        String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
+        Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
+        String currency = intent.getStringExtra(Constants.EXTRA_MESSAGE_CURRENCY);
+        String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);
+
+        MenuItem item = menu.findItem(R.id.action_edit);
+        Intent new_intent = new Intent(this, FormActivity.class);
+        new_intent.putExtra(Constants.EXTRA_MESSAGE_ID, id);
+        new_intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, title);
+        new_intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, price);
+        new_intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, currency);
+        new_intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, description);
+
+        item.setIntent(new_intent);
         return true;
     }
 
