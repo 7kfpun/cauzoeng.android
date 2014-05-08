@@ -112,7 +112,10 @@ public class MainActivity extends FragmentActivity {
 
                 Double[] lat_lon = Utils.getGpsLocation(getSystemService(Context.LOCATION_SERVICE));
                 Toast.makeText(this, "lat: " + lat_lon[0] + " lon: " + lat_lon[1], Toast.LENGTH_SHORT).show();
-
+                break;
+            case R.id.action_map:
+                Intent map_intent = new Intent(this, MapActivity.class);
+                this.startActivity(map_intent);
                 break;
             case R.id.action_about:
                 Toast.makeText(this, "About menu", Toast.LENGTH_SHORT).show();
@@ -266,7 +269,6 @@ public class MainActivity extends FragmentActivity {
             return rootView;
         }
     }
-
 
     /**
      * Map fragment control.

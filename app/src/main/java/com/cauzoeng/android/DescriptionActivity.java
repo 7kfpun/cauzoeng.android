@@ -81,5 +81,4 @@ public class DescriptionActivity extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

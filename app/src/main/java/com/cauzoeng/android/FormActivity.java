@@ -49,7 +49,7 @@ public class FormActivity extends FragmentActivity {
         textDescription.setText(description);
 
         Button submitFormButton = (Button) findViewById(R.id.button);
-        submitFormButton.setOnClickListener( new View.OnClickListener() {
+        submitFormButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -135,5 +135,4 @@ public class FormActivity extends FragmentActivity {
         int id = item.getItemId();
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
-
 }
