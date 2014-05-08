@@ -42,8 +42,7 @@ public class Utils {
             lon = -1.0;
             Log.e(Constants.GPS_TAG, e.toString());
         }
-
-        locationManager.removeUpdates(loc_listener);
+        // locationManager.removeUpdates(loc_listener);
 
         return new Double[] {lat, lon};
     }

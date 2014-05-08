@@ -2,15 +2,9 @@ package com.cauzoeng.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +21,6 @@ import android.widget.ToggleButton;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-
-import java.util.Objects;
 
 
 public class FormActivity extends FragmentActivity {
@@ -91,6 +83,14 @@ public class FormActivity extends FragmentActivity {
                 json.addProperty("condition", radioConditionButton.getText().toString());
                 json.addProperty("available_days", 15);
 
+                Double[] lat_lon = Utils.getGpsLocation(getSystemService(Context.LOCATION_SERVICE));
+                if (lat_lon[0] != -1 && lat_lon[1] != -1) {
+                    JsonObject location = new JsonObject();
+                    location.addProperty("lat", lat_lon[0]);
+                    location.addProperty("lon", lat_lon[1]);
+                    json.add("location", location);
+                }
+
                 Ion.with(getBaseContext())
                         .load(Constants.ITEM_API_URL)
                         .setJsonObjectBody(json)
@@ -113,9 +113,8 @@ public class FormActivity extends FragmentActivity {
             public void onClick(View v) {
                 TextView textGps = (TextView)findViewById(R.id.textGps);
 
-                Object s = getSystemService(LOCATION_SERVICE);
-                Double[] lat_lon = Utils.getGpsLocation(s);
-                textGps.setText(lat_lon.toString());
+                Double[] lat_lon = Utils.getGpsLocation(getSystemService(LOCATION_SERVICE));
+                textGps.setText("lat: " + lat_lon[0] + " lon: " + lat_lon[1]);
             }
         });
     }
