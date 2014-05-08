@@ -7,7 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.koushikdutta.ion.Ion;
 
 
 public class DescriptionActivity extends FragmentActivity {
@@ -35,6 +38,12 @@ public class DescriptionActivity extends FragmentActivity {
         currencyTextView.setText(currency);
         TextView descriptionTextView = (TextView) findViewById(R.id.textDescription);
         descriptionTextView.setText(description);
+
+        String imageUrl = "http://img.1ting.com/images/album/0706/s300_20066574366.jpg";
+        ImageView imageView = (ImageView) findViewById(R.id.img);
+        Ion.with(imageView)
+                .placeholder(R.drawable.ic_launcher)
+                .load(imageUrl);
     }
 
     @Override

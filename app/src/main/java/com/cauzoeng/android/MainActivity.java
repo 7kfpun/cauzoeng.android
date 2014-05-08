@@ -33,16 +33,13 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.lang.InterruptedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -235,7 +232,7 @@ public class MainActivity extends FragmentActivity {
                                     final String[] arr_created_dates = created_dates.toArray(new String[created_dates.size()]);
                                     final Integer[] arr_imageIds = imageIds.toArray(new Integer[imageIds.size()]);
 
-                                    CurrentList adapter = new CurrentList(
+                                    CurrentListAdapter adapter = new CurrentListAdapter(
                                             getActivity(), arr_titles, arr_prices, arr_currencies, arr_descriptions,
                                             arr_created_dates, arr_imageIds);
                                     list.setAdapter(adapter);
