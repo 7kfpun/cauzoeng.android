@@ -6,11 +6,6 @@ import android.util.Log;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 
 /**
  * Created by jp on 5/7/14.

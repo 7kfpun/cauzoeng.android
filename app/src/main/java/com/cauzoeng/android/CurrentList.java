@@ -16,11 +16,11 @@ public class CurrentList extends ArrayAdapter<String>{
     private final String[] currencies;
     private final String[] descriptions;
     private final String[] created_dates;
-    private final int[] imageIds;
+    private final Integer[] imageIds;
 
     public CurrentList(Activity context,
                        String[] titles, Double[] prices, String[] currencies, String[] descriptions,
-                       String[] created_dates, int[] imageIds) {
+                       String[] created_dates, Integer[] imageIds) {
         super(context, R.layout.listview_current_item, titles);
         this.context = context;
 
