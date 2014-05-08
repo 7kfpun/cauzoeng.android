@@ -6,6 +6,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -110,6 +114,36 @@ public class MainActivity extends FragmentActivity {
                 break;
             case R.id.action_settings:
                 Toast.makeText(this, "Settings menu", Toast.LENGTH_SHORT).show();
+
+                LocationManager locationManager = (LocationManager)
+                        getSystemService(LOCATION_SERVICE);
+                Criteria criteria = new Criteria();
+                String bestProvider = locationManager.getBestProvider(criteria, false);
+                Location location = locationManager.getLastKnownLocation(bestProvider);
+                LocationListener loc_listener = new LocationListener() {
+
+                    public void onLocationChanged(Location l) {}
+
+                    public void onProviderEnabled(String p) {}
+
+                    public void onProviderDisabled(String p) {}
+
+                    public void onStatusChanged(String p, int status, Bundle extras) {}
+                };
+                locationManager
+                        .requestLocationUpdates(bestProvider, 0, 0, loc_listener);
+                location = locationManager.getLastKnownLocation(bestProvider);
+                Double lat, lon;
+                try {
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                } catch (NullPointerException e) {
+                    lat = -1.0;
+                    lon = -1.0;
+                }
+
+                Toast.makeText(this, "lat: " + lat + " lon: " + lon, Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.action_about:
                 Toast.makeText(this, "About menu", Toast.LENGTH_SHORT).show();
