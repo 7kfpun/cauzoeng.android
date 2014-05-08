@@ -33,19 +33,16 @@ import android.widget.Toast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import com.google.gson.JsonParser;
+
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.lang.InterruptedException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.Locale;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -152,118 +149,119 @@ public class MainActivity extends FragmentActivity {
             final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
             final ListView list = (ListView) rootView.findViewById(R.id.list);
 
-            String response = null;
-
-            try {
-                response = new DownloadItemTask().execute(Constants.ITEM_API_URL).get();
-                Log.i(Constants.HTTP_TAG, response);
-            } catch (ExecutionException e){
-
-            } catch (InterruptedException e) {
-
-            } finally {
-
-                JsonObject obj = new JsonParser().parse(response).getAsJsonObject();
-                JsonArray obj_array = obj.getAsJsonArray("items");
-
-
-                final ArrayList<String> item_ids = new ArrayList<String>();
-                List<String> users = new ArrayList<String>();
-                List<String> titles = new ArrayList<String>();
-                List<Double> prices = new ArrayList<Double>();
-                List<String> currencies = new ArrayList<String>();
-                List<String> descriptions = new ArrayList<String>();
-                List<String> created_dates = new ArrayList<String>();
-                List<Integer> imageIds = new ArrayList<Integer>();
-
-                try {
-                    for (JsonElement result : obj_array) {
-                        JsonObject item = result.getAsJsonObject();
-                        String title = item.get("title").getAsString();
-
-                        if (item.has("id")) {
-                            item_ids.add(item.get("id").getAsString());
-                        } else {
-                            item_ids.add("");
-                        }
-
-                        if (item.has("user")) {
-                            users.add(item.get("user").getAsString());
-                        } else {
-                            users.add("");
-                        }
-
-                        if (item.has("title")) {
-                            titles.add(item.get("title").getAsString());
-                        } else {
-                            titles.add("");
-                        }
-
-                        if (item.has("price")) {
-                            prices.add(item.get("price").getAsDouble());
-                        } else {
-                            prices.add(0.0);
-                        }
-
-                        if (item.has("currency")) {
-                            currencies.add(item.get("currency").getAsString());
-                        } else {
-                            currencies.add("");
-                        }
-
-                        if (item.has("description")) {
-                            descriptions.add(item.get("description").getAsString());
-                        } else {
-                            descriptions.add("");
-                        }
-
-                        if (item.has("created_date")) {
-                            created_dates.add(item.get("created_date").getAsString());
-                        } else {
-                            created_dates.add("");
-                        }
-
-                        imageIds.add(R.drawable.ic_launcher);
-
-                        Log.i(Constants.JSON_TAG, ">> Title: " + title);
-                    }
-                    Log.d(Constants.JSON_TAG, "Successful parsing GSON.");
-                } catch (Throwable t) {
-                    Log.e(Constants.JSON_TAG, "Could not parse GSON: " + t.getMessage());
-
-                } finally {
-
-                    final String[] arr_item_ids = item_ids.toArray(new String[item_ids.size()]);
-                    final String[] arr_titles = titles.toArray(new String[titles.size()]);
-                    final Double[] arr_prices = prices.toArray(new Double[prices.size()]);
-                    final String[] arr_currencies = currencies.toArray(new String[currencies.size()]);
-                    final String[] arr_descriptions = descriptions.toArray(new String[descriptions.size()]);
-                    final String[] arr_created_dates = created_dates.toArray(new String[created_dates.size()]);
-                    final Integer[] arr_imageIds = imageIds.toArray(new Integer[imageIds.size()]);
-
-                    CurrentList adapter = new CurrentList(
-                            getActivity(), arr_titles, arr_prices, arr_currencies, arr_descriptions,
-                            arr_created_dates, arr_imageIds);
-                    list.setAdapter(adapter);
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            Ion.with(getActivity())
+                    .load(Constants.ITEM_API_URL)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
                         @Override
-                        public void onItemClick(
-                                AdapterView<?> parent, View view, int position, long id) {
-                            Toast.makeText(getActivity(), "You Clicked at " + arr_titles[position], Toast.LENGTH_SHORT).show();
+                        public void onCompleted(Exception e, JsonObject obj) {
+                            // do stuff with the result or error
+                            if (e == null) {
+                                Log.d(Constants.JSON_TAG, "json: " + obj);
 
-                            Intent intent = new Intent(getActivity(), DescriptionActivity.class);
-                            intent.putExtra(Constants.EXTRA_MESSAGE_ID, arr_item_ids[position]);
-                            intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, arr_titles[position]);
-                            intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, arr_prices[position]);
-                            intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, arr_currencies[position]);
-                            intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, arr_descriptions[position]);
-                            startActivity(intent);
+                                JsonArray obj_array = obj.getAsJsonArray("items");
 
-                            Log.i(Constants.EVENT_TAG, "Start an activity.");
+                                List<String> item_ids = new ArrayList<String>();
+                                List<String> users = new ArrayList<String>();
+                                List<String> titles = new ArrayList<String>();
+                                List<Double> prices = new ArrayList<Double>();
+                                List<String> currencies = new ArrayList<String>();
+                                List<String> descriptions = new ArrayList<String>();
+                                List<String> created_dates = new ArrayList<String>();
+                                List<Integer> imageIds = new ArrayList<Integer>();
+
+                                try {
+                                    for (JsonElement result : obj_array) {
+                                        JsonObject item = result.getAsJsonObject();
+                                        String title = item.get("title").getAsString();
+
+                                        if (item.has("id")) {
+                                            item_ids.add(item.get("id").getAsString());
+                                        } else {
+                                            item_ids.add("");
+                                        }
+
+                                        if (item.has("user")) {
+                                            users.add(item.get("user").getAsString());
+                                        } else {
+                                            users.add("");
+                                        }
+
+                                        if (item.has("title")) {
+                                            titles.add(item.get("title").getAsString());
+                                        } else {
+                                            titles.add("");
+                                        }
+
+                                        if (item.has("price")) {
+                                            prices.add(item.get("price").getAsDouble());
+                                        } else {
+                                            prices.add(0.0);
+                                        }
+
+                                        if (item.has("currency")) {
+                                            currencies.add(item.get("currency").getAsString());
+                                        } else {
+                                            currencies.add("");
+                                        }
+
+                                        if (item.has("description")) {
+                                            descriptions.add(item.get("description").getAsString());
+                                        } else {
+                                            descriptions.add("");
+                                        }
+
+                                        if (item.has("created_date")) {
+                                            created_dates.add(item.get("created_date").getAsString());
+                                        } else {
+                                            created_dates.add("");
+                                        }
+
+                                        imageIds.add(R.drawable.ic_launcher);
+
+                                        Log.i(Constants.JSON_TAG, ">> Title: " + title);
+                                    }
+                                    Log.d(Constants.JSON_TAG, "Successful parsing GSON.");
+                                } catch (Throwable t) {
+                                    Log.e(Constants.JSON_TAG, "Could not parse GSON: " + t.getMessage());
+
+                                } finally {
+
+                                    final String[] arr_item_ids = item_ids.toArray(new String[item_ids.size()]);
+                                    final String[] arr_titles = titles.toArray(new String[titles.size()]);
+                                    final Double[] arr_prices = prices.toArray(new Double[prices.size()]);
+                                    final String[] arr_currencies = currencies.toArray(new String[currencies.size()]);
+                                    final String[] arr_descriptions = descriptions.toArray(new String[descriptions.size()]);
+                                    final String[] arr_created_dates = created_dates.toArray(new String[created_dates.size()]);
+                                    final Integer[] arr_imageIds = imageIds.toArray(new Integer[imageIds.size()]);
+
+                                    CurrentList adapter = new CurrentList(
+                                            getActivity(), arr_titles, arr_prices, arr_currencies, arr_descriptions,
+                                            arr_created_dates, arr_imageIds);
+                                    list.setAdapter(adapter);
+                                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(
+                                                AdapterView<?> parent, View view, int position, long id) {
+                                            Toast.makeText(getActivity(), "You Clicked at " + arr_titles[position], Toast.LENGTH_SHORT).show();
+
+                                            Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+                                            intent.putExtra(Constants.EXTRA_MESSAGE_ITEM_ID, arr_item_ids[position]);
+                                            intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, arr_titles[position]);
+                                            intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, arr_prices[position]);
+                                            intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, arr_currencies[position]);
+                                            intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, arr_descriptions[position]);
+                                            startActivity(intent);
+
+                                            Log.i(Constants.EVENT_TAG, "Start an activity.");
+                                        }
+                                    });
+                                }
+                            } else {
+                                Log.d(Constants.JSON_TAG, "error: " + e);
+                            }
                         }
                     });
-                }
-            }
 
             return rootView;
         }

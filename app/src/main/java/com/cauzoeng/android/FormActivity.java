@@ -34,7 +34,7 @@ public class FormActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         Intent intent = getIntent();
-        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+        final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ITEM_ID);
         String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
         Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
         String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);

@@ -19,7 +19,7 @@ public class DescriptionActivity extends FragmentActivity {
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
 
         Intent intent = getIntent();
-        String item_id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+        String item_id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ITEM_ID);
         String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
         Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
         String currency = intent.getStringExtra(Constants.EXTRA_MESSAGE_CURRENCY);
@@ -52,14 +52,14 @@ public class DescriptionActivity extends FragmentActivity {
         int id = item.getItemId();
         if (id == R.id.action_edit) {
             Intent intent = getIntent();
-            String item_id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ID);
+            String item_id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ITEM_ID);
             String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
             Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
             String currency = intent.getStringExtra(Constants.EXTRA_MESSAGE_CURRENCY);
             String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);
 
             Intent new_intent = new Intent(this, FormActivity.class);
-            new_intent.putExtra(Constants.EXTRA_MESSAGE_ID, item_id);
+            new_intent.putExtra(Constants.EXTRA_MESSAGE_ITEM_ID, item_id);
             new_intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, title);
             new_intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, price);
             new_intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, currency);
