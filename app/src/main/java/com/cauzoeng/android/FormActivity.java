@@ -2,10 +2,15 @@ package com.cauzoeng.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,12 +20,15 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
+import java.util.Objects;
 
 
 public class FormActivity extends FragmentActivity {
@@ -55,11 +63,7 @@ public class FormActivity extends FragmentActivity {
             public void onClick(View v) {
                 Log.i(Constants.EVENT_TAG, "click send form");
 
-                WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                String macAddress = wm.getConnectionInfo().getMacAddress();
-                if ( macAddress == null || macAddress.isEmpty() ) {
-                    macAddress = "FAKE_USER";
-                }
+                String user = Utils.getMacAddress(getSystemService(Context.WIFI_SERVICE));
 
                 ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
                 RadioGroup radioConditionGroup = (RadioGroup) findViewById(R.id.radioCondition);
@@ -76,7 +80,7 @@ public class FormActivity extends FragmentActivity {
                     json.addProperty("id", id);
                 }
 
-                json.addProperty("user", macAddress);
+                json.addProperty("user", user);
 
                 json.addProperty("title", textItem.getText().toString());
                 json.addProperty("price", textPrice.getText().toString());
@@ -99,6 +103,19 @@ public class FormActivity extends FragmentActivity {
                                 finish();
                             }
                         });
+            }
+        });
+
+        Button gpsButton = (Button) findViewById(R.id.button_gps);
+        gpsButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                TextView textGps = (TextView)findViewById(R.id.textGps);
+
+                Object s = getSystemService(LOCATION_SERVICE);
+                Double[] lat_lon = Utils.getGpsLocation(s);
+                textGps.setText(lat_lon.toString());
             }
         });
     }

@@ -335,8 +335,8 @@ public class MainActivity extends FragmentActivity {
             View rootView = inflater.inflate(R.layout.fragment_main_2_helps, container, false);
             TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
 
-            WifiManager wm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-            dummyTextView.setText("MAC address.......: " + wm.getConnectionInfo().getMacAddress());
+            String mac = Utils.getMacAddress(getActivity().getSystemService(Context.WIFI_SERVICE));
+            dummyTextView.setText("MAC address.......: " + mac);
 
             Button clickPopupButton = (Button) rootView.findViewById(R.id.button1);
             clickPopupButton.setOnClickListener( new OnClickListener() {
