@@ -4,9 +4,7 @@
 # built application files
 *.apk
 *.ap_
-*.jar
-
-!libs/ -- uploading libs for AIDE
+#*.jar  -- uploading libs for AIDE
 
 # lint folder
 lint
