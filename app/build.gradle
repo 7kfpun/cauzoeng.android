@@ -20,6 +20,13 @@ android {
         debug {
             storeFile file('debug.keystore')
         }
+
+        /*release {
+            storeFile file("prod.keystore")
+            storePassword 'prod'
+            keyAlias 'prod'
+            keyPassword 'prod'
+        }*/
     }
 }
 
