@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.cauzoeng.android.model.ItemListReader;
 
 /**
  * MainActivity.
@@ -230,13 +231,23 @@ public class MainActivity extends FragmentActivity {
 
                                 } finally {
 
-                                    final String[] arr_item_ids = item_ids.toArray(new String[item_ids.size()]);
+                                    /*final String[] arr_item_ids = item_ids.toArray(new String[item_ids.size()]);
                                     final String[] arr_titles = titles.toArray(new String[titles.size()]);
+
                                     final Double[] arr_prices = prices.toArray(new Double[prices.size()]);
                                     final String[] arr_currencies = currencies.toArray(new String[currencies.size()]);
                                     final String[] arr_descriptions = descriptions.toArray(new String[descriptions.size()]);
                                     final String[] arr_created_dates = created_dates.toArray(new String[created_dates.size()]);
-                                    final Integer[] arr_imageIds = imageIds.toArray(new Integer[imageIds.size()]);
+                                    final Integer[] arr_imageIds = imageIds.toArray(new Integer[imageIds.size()]);*/
+
+                                    ItemListReader itemList = new ItemListReader(obj);
+                                    final String[] arr_item_ids = itemList.getItemIds();
+                                    final String[] arr_titles = itemList.getTitles();
+                                    final Double[] arr_prices = itemList.getPrices();
+                                    final String[] arr_currencies = itemList.getCurrencies();
+                                    final String[] arr_descriptions = itemList.getDescriptions();
+                                    final String[] arr_created_dates = itemList.getCreateDates();
+                                    final Integer[] arr_imageIds = itemList.getImageIds();
 
                                     CurrentListAdapter adapter = new CurrentListAdapter(
                                             getActivity(), arr_titles, arr_prices, arr_currencies, arr_descriptions,
