@@ -98,7 +98,7 @@ public class ItemListReader {
         }
     }
 
-    private Integer getLength() {
+    private int getLength() {
         return this.obj_array.size();
     }
 
