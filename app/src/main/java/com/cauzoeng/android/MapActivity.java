@@ -3,6 +3,7 @@ package com.cauzoeng.android;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -22,7 +23,8 @@ public class MapActivity extends FragmentActivity {
                 googleMap = ((MapFragment) getFragmentManager().
                         findFragmentById(R.id.map)).getMap();
             }
-            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
             Marker TP = googleMap.addMarker(new MarkerOptions().
                     position(TutorialsPoint).title("TutorialsPoint"));
 
