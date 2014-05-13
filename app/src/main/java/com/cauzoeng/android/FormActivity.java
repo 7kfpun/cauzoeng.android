@@ -58,7 +58,7 @@ public class FormActivity extends FragmentActivity {
                 String user = Utils.getMacAddress(getSystemService(Context.WIFI_SERVICE));
 
                 ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
-                RadioGroup radioConditionGroup = (RadioGroup) findViewById(R.id.radioCondition);
+                RadioGroup radioConditionGroup = (RadioGroup) findViewById(R.id.radioGroupCondition);
                 int selectedId = radioConditionGroup.getCheckedRadioButtonId();
                 RadioButton radioConditionButton = (RadioButton) findViewById(selectedId);
 

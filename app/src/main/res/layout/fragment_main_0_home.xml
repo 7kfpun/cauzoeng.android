@@ -13,18 +13,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <EditText
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/search_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search bar"
-        android:id="@+id/search_bar"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:hint="Search bar"
+            android:id="@+id/search_bar"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="S"
+            android:id="@+id/buttonSearch" />
+
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/search_bar">
+        android:layout_below="@+id/search_layout">
     </ListView>
 
 </RelativeLayout>

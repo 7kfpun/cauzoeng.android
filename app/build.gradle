@@ -31,10 +31,10 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:+'
+    compile 'com.android.support:support-v4:19.+'
     compile 'com.android.support:appcompat-v7:19.+'
     compile 'com.google.android.gms:play-services:4.3.+'
     compile 'com.koushikdutta.ion:ion:1.2.+'
-    compile 'com.androidmapsextensions:android-maps-extensions:2.1.+';
-    compile 'com.google.maps.android:android-maps-utils:0.3+'
+    compile 'com.androidmapsextensions:android-maps-extensions:2.1.+'
+    compile 'com.google.maps.android:android-maps-utils:0.3.+'
 }

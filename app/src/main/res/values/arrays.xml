@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="filterOrder">
+        <item name="DATE_INC">date inc</item>
+        <item name="DATE_DES">date des</item>
+        <item name="PRICE_INC">price inc</item>
+        <item name="PRICE_DES">price des</item>
+        <item name="DISTANCE">distance</item>
+    </string-array>
+
+    <string-array name="filterOrderValues">
+        <item name="DATE_INC">created_date</item>
+        <item name="DATE_DES">-created_date</item>
+        <item name="PRICE_INC">price</item>
+        <item name="PRICE_DES">-price</item>
+        <item name="DISTANCE">distance</item>
+    </string-array>
+
+    <string-array name="syncFrequency">
+        <item name="1">Once a day</item>
+        <item name="7">Once a week</item>
+        <item name="3">Once a year</item>
+        <item name="0">Never (Update maually)</item>
+    </string-array>
+
+    <string-array name="syncFrequencyValues">
+        <item name="1">1</item>
+        <item name="7">7</item>
+        <item name="30">30</item>
+        <item name="0">0</item>
+    </string-array>
+
+    <string-array name="currency_arrays">
+        <item>AED</item>
+        <item>ARS</item>
+        <item>AUD</item>
+        <item>BMD</item>
+        <item>BRL</item>
+        <item>CAD</item>
+        <item>CHF</item>
+        <item>CLP</item>
+        <item>CNY</item>
+        <item>COP</item>
+        <item>CZK</item>
+        <item>DKK</item>
+        <item>EEK</item>
+        <item>EGP</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>HKD</item>
+        <item>HRK</item>
+        <item>HUF</item>
+        <item>IDR</item>
+        <item>ILS</item>
+        <item>INR</item>
+        <item>JMD</item>
+        <item>JPY</item>
+        <item>KRW</item>
+        <item>KZT</item>
+        <item>MXN</item>
+        <item>MYR</item>
+        <item>NOK</item>
+        <item>NZD</item>
+        <item>PEN</item>
+        <item>PHP</item>
+        <item>PLN</item>
+        <item>QAR</item>
+        <item>RON</item>
+        <item>RUB</item>
+        <item>SAR</item>
+        <item>SEK</item>
+        <item>SGD</item>
+        <item>THB</item>
+        <item>TRY</item>
+        <item>TTD</item>
+        <item>TWD</item>
+        <item>USD</item>
+        <item>VND</item>
+        <item>YDC</item>
+        <item>ZAR</item>
+    </string-array>
+
+</resources>
