@@ -176,78 +176,91 @@ public class MainActivity extends FragmentActivity {
         public HomeSectionFragment() {
 		}
 
+        private void renderList (View rootView) {
+
+            // Notify swipeRefreshLayout that the refresh has started (used for non-swiping)
+            SwipeRefreshLayout swipe_refresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
+            swipe_refresh.setRefreshing(true);
+
+            SharedPreferences sharedPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(rootView.getContext());
+
+            final ListView list = (ListView) rootView.findViewById(R.id.list);
+
+            String prefFilterOrder = sharedPrefs.getString("prefFilterOrder", "created_date");
+            Log.d(Constants.EVENT_TAG, "prefFilterOrder" + prefFilterOrder);
+
+            Ion.with(getActivity())
+                    .load(Constants.ITEM_API_URL)
+                    .addQuery("order", prefFilterOrder)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject obj) {
+
+                            try {
+                                ItemListReader itemList = new ItemListReader(obj);
+                                final String[] arr_item_ids = itemList.getItemIds();
+                                final String[] arr_titles = itemList.getTitles();
+                                final Double[] arr_prices = itemList.getPrices();
+                                final String[] arr_currencies = itemList.getCurrencies();
+                                final String[] arr_descriptions = itemList.getDescriptions();
+                                final String[] arr_created_dates = itemList.getCreateDates();
+                                final Integer[] arr_imageIds = itemList.getImageIds();
+
+                                CurrentListAdapter adapter = new CurrentListAdapter(
+                                        getActivity(), arr_titles, arr_prices, arr_currencies, arr_descriptions,
+                                        arr_created_dates, arr_imageIds);
+                                list.setAdapter(adapter);
+                                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(
+                                            AdapterView<?> parent, View view, int position, long id) {
+                                        Toast.makeText(getActivity(), "You Clicked at " + arr_titles[position], Toast.LENGTH_SHORT).show();
+
+                                        Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+                                        intent.putExtra(Constants.EXTRA_MESSAGE_ITEM_ID, arr_item_ids[position]);
+                                        intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, arr_titles[position]);
+                                        intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, arr_prices[position]);
+                                        intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, arr_currencies[position]);
+                                        intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, arr_descriptions[position]);
+                                        startActivity(intent);
+
+                                        Log.i(Constants.EVENT_TAG, "Start an activity.");
+                                    }
+                                });
+                            } catch (Throwable t) {
+                                Log.e(Constants.HTTP_TAG, t.toString());
+                            }
+                        }
+                    });
+
+            // Notify swipeRefreshLayout that the refresh has finished
+            swipe_refresh.setRefreshing(false);
+        }
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            //final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
-            final SwipeRefreshLayout rootView = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_main_0_home, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
+            renderList(rootView);
 
-            rootView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            SwipeRefreshLayout swipe_refresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
+            swipe_refresh.setColorScheme(R.color.blue, R.color.green, R.color.orange, R.color.purple);
+
+            swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     Log.d(Constants.EVENT_TAG, "refresh");
+                    renderList(rootView);
                 }
             });
-
-            final ListView list = (ListView) rootView.findViewById(R.id.list);
 
             Button clickPopupButton = (Button) rootView.findViewById(R.id.buttonSearch);
             clickPopupButton.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-
-                    SharedPreferences sharedPrefs = PreferenceManager
-                            .getDefaultSharedPreferences(rootView.getContext());
-
-                    String prefFilterOrder = sharedPrefs.getString("prefFilterOrder", "created_date");
-                    Log.d(Constants.EVENT_TAG, "prefFilterOrder" + prefFilterOrder);
-
-                    Ion.with(getActivity())
-                            .load(Constants.ITEM_API_URL)
-                            .addQuery("order", prefFilterOrder)
-                            .asJsonObject()
-                            .setCallback(new FutureCallback<JsonObject>() {
-                                @Override
-                                public void onCompleted(Exception e, JsonObject obj) {
-
-                                    try {
-                                        ItemListReader itemList = new ItemListReader(obj);
-                                        final String[] arr_item_ids = itemList.getItemIds();
-                                        final String[] arr_titles = itemList.getTitles();
-                                        final Double[] arr_prices = itemList.getPrices();
-                                        final String[] arr_currencies = itemList.getCurrencies();
-                                        final String[] arr_descriptions = itemList.getDescriptions();
-                                        final String[] arr_created_dates = itemList.getCreateDates();
-                                        final Integer[] arr_imageIds = itemList.getImageIds();
-
-                                        CurrentListAdapter adapter = new CurrentListAdapter(
-                                                getActivity(), arr_titles, arr_prices, arr_currencies, arr_descriptions,
-                                                arr_created_dates, arr_imageIds);
-                                        list.setAdapter(adapter);
-                                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(
-                                                    AdapterView<?> parent, View view, int position, long id) {
-                                                Toast.makeText(getActivity(), "You Clicked at " + arr_titles[position], Toast.LENGTH_SHORT).show();
-
-                                                Intent intent = new Intent(getActivity(), DescriptionActivity.class);
-                                                intent.putExtra(Constants.EXTRA_MESSAGE_ITEM_ID, arr_item_ids[position]);
-                                                intent.putExtra(Constants.EXTRA_MESSAGE_TITLE, arr_titles[position]);
-                                                intent.putExtra(Constants.EXTRA_MESSAGE_PRICE, arr_prices[position]);
-                                                intent.putExtra(Constants.EXTRA_MESSAGE_CURRENCY, arr_currencies[position]);
-                                                intent.putExtra(Constants.EXTRA_MESSAGE_DESCRIPTION, arr_descriptions[position]);
-                                                startActivity(intent);
-
-                                                Log.i(Constants.EVENT_TAG, "Start an activity.");
-                                            }
-                                        });
-                                    } catch (Throwable t) {
-                                        Log.e(Constants.HTTP_TAG, t.toString());
-                                    }
-                                }
-                            });
-
+                    renderList(rootView);
                 }
             });
 
