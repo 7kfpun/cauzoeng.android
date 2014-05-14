@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -255,12 +257,17 @@ public class MainActivity extends FragmentActivity {
                 }
             });
 
-            Button clickPopupButton = (Button) rootView.findViewById(R.id.buttonSearch);
-            clickPopupButton.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    renderList(rootView);
+            final EditText search_bar = (EditText) rootView.findViewById(R.id.search_bar);
+            search_bar.setOnKeyListener(new View.OnKeyListener() {
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // If the event is a key-down event on the "enter" button
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        Toast.makeText(getActivity(), search_bar.getText(), Toast.LENGTH_SHORT).show();
+                        renderList(rootView);
+                        return true;
+                    }
+                    return false;
                 }
             });
 
