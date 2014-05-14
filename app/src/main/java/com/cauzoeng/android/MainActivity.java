@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -108,8 +109,7 @@ public class MainActivity extends FragmentActivity {
                 textview.setText("Your really long message.");
 
                 RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroupOrder);
-                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-                {
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         // checkedId is the RadioButton selected
                         RadioButton radioOrderButton = (RadioButton) view.findViewById(checkedId);
@@ -173,17 +173,26 @@ public class MainActivity extends FragmentActivity {
 	public static class HomeSectionFragment extends Fragment {
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
-		public HomeSectionFragment() {
+        public HomeSectionFragment() {
 		}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
+            //final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
+            final SwipeRefreshLayout rootView = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_main_0_home, container, false);
+
+            rootView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d(Constants.EVENT_TAG, "refresh");
+                }
+            });
+
             final ListView list = (ListView) rootView.findViewById(R.id.list);
 
             Button clickPopupButton = (Button) rootView.findViewById(R.id.buttonSearch);
-            clickPopupButton.setOnClickListener( new OnClickListener() {
+            clickPopupButton.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
