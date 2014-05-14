@@ -26,11 +26,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <ImageButton
-                android:layout_width="88dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton"
-                android:layout_weight="0.46" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/imageButton0" />
+
+                <ImageButton
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/imageButton1" />
+
+                <ImageButton
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/imageButton2" />
+            </LinearLayout>
 
             <EditText
                 android:layout_width="match_parent"

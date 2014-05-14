@@ -102,32 +102,7 @@ public class MainActivity extends FragmentActivity {
                 Intent intent = new Intent(this, FormActivity.class);
                 this.startActivity(intent);
                 break;
-            case R.id.action_filter:
-                Toast.makeText(this, "Filter menu", Toast.LENGTH_SHORT).show();
-                LayoutInflater inflater= LayoutInflater.from(this);
-                final View view=inflater.inflate(R.layout.filter, null);
 
-                TextView textview=(TextView) view.findViewById(R.id.textmsg);
-                textview.setText("Your really long message.");
-
-                RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroupOrder);
-                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        // checkedId is the RadioButton selected
-                        RadioButton radioOrderButton = (RadioButton) view.findViewById(checkedId);
-                        order = radioOrderButton.getText().toString();
-                        Toast.makeText(getApplication(), order, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-                alertDialog.setTitle("Title");
-                //alertDialog.setMessage("Here is a really long message.");
-                alertDialog.setView(view);
-                alertDialog.setPositiveButton("OK", null);
-                AlertDialog alert = alertDialog.create();
-                alert.show();
-                break;
             case R.id.action_settings:
                 Toast.makeText(this, "Settings menu", Toast.LENGTH_SHORT).show();
 
@@ -138,10 +113,12 @@ public class MainActivity extends FragmentActivity {
                 this.startActivity(intentSetting);
 
                 break;
+
             case R.id.action_map:
                 Intent map_intent = new Intent(this, MapActivity.class);
                 this.startActivity(map_intent);
                 break;
+
             case R.id.action_about:
                 SharedPreferences sharedPrefs = PreferenceManager
                         .getDefaultSharedPreferences(this);
@@ -313,108 +290,6 @@ public class MainActivity extends FragmentActivity {
 
             String mac = Utils.getMacAddress(getActivity().getSystemService(Context.WIFI_SERVICE));
             dummyTextView.setText("MAC address.......: " + mac);
-
-            Button clickPopupButton = (Button) rootView.findViewById(R.id.button1);
-            clickPopupButton.setOnClickListener( new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Log.i(Constants.EVENT_TAG, "click open popup http");
-
-                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.popup, null);
-                    final PopupWindow mpopup = new PopupWindow(
-                        popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-                    mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
-                    mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
-
-                    WebViewClient myWebClient = new WebViewClient()
-                    {
-                        @Override
-                        public boolean shouldOverrideUrlLoading(WebView  view, String  url)
-                        {
-                            // This line we let me load only pages inside "com" Webpage
-                            if ( url.contains("com") )
-                                //Load new URL Don't override URL Link
-                                return false;
-
-                            return true;
-                        }
-                    };
-
-                    try {
-                        WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
-                        webView.getSettings().setJavaScriptEnabled(true);
-                        webView.getSettings().setBuiltInZoomControls(true);
-                        webView.getSettings().setSupportZoom(true);
-                        webView.setWebViewClient(myWebClient);
-                        webView.loadUrl("http://www.google.com");
-
-                    } catch (Exception e) {
-                        Log.e(Constants.EVENT_TAG, "Web open " + e.toString());
-                    }
-
-                    Button btnOk = (Button)popUpView.findViewById(R.id.button1);
-                    btnOk.setOnClickListener(new OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v) {
-                            Log.i(Constants.EVENT_TAG, "click ok popup http");
-                            mpopup.dismiss();
-                        }
-                    });
-
-                    Button btnCancel = (Button)popUpView.findViewById(R.id.button2);
-                    btnCancel.setOnClickListener(new OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v) {
-                            Log.i(Constants.EVENT_TAG, "click cancel popup http");
-                            mpopup.dismiss();
-                        }
-                    });
-                }
-            });
-
-            Button clickPopupFormButton = (Button) rootView.findViewById(R.id.button2);
-            clickPopupFormButton.setOnClickListener( new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Log.i(Constants.EVENT_TAG, "click open popup http");
-
-                    View popUpView = getActivity().getLayoutInflater().inflate(R.layout.activity_form, null);
-                    final PopupWindow mpopup = new PopupWindow(
-                            popUpView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-                    mpopup.setAnimationStyle(android.R.style.Animation_Dialog);
-                    mpopup.showAtLocation(popUpView, Gravity.BOTTOM, 0, 0);
-
-                    WebViewClient myWebClient = new WebViewClient()
-                    {
-                        @Override
-                        public boolean shouldOverrideUrlLoading(WebView  view, String  url)
-                        {
-                            // This line we let me load only pages inside "com" Webpage
-                            if ( url.contains("com") )
-                                //Load new URL Don't override URL Link
-                                return false;
-
-                            return true;
-                        }
-                    };
-
-                    try {
-                        WebView webView = (WebView) popUpView.findViewById(R.id.webView1);
-                        webView.getSettings().setJavaScriptEnabled(true);
-                        webView.getSettings().setBuiltInZoomControls(true);
-                        webView.getSettings().setSupportZoom(true);
-                        webView.setWebViewClient(myWebClient);
-                        webView.loadUrl("http://hk.yahoo.com/");
-
-                    } catch (Exception e) {
-                        Log.e(Constants.EVENT_TAG, "Web open " + e.toString());
-                    }
-                }
-            });
 
             return rootView;
         }
