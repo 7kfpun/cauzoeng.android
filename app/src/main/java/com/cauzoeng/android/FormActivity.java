@@ -2,13 +2,17 @@ package com.cauzoeng.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -18,37 +22,93 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class FormActivity extends FragmentActivity {
+
+    @InjectView(R.id.button)                    Button submitFormButton;
+    @InjectView(R.id.editTextItem)              EditText editTextItem;
+    @InjectView(R.id.editTextPrice)             EditText editTextPrice;
+    @InjectView(R.id.spinnerCurrency)           Spinner spinnerCurrency;
+    @InjectView(R.id.editTextDescription)       EditText editTextDescription;
+    @InjectView(R.id.editTextEmailAddress)      EditText textEmailAddress;
+    @InjectView(R.id.editTextPhone)             EditText textPhone;
+
+    @InjectView(R.id.button_gps)                Button gpsButton;
+
+    @InjectView(R.id.toggleButton)              ToggleButton toggleButton;
+    @InjectView(R.id.radioGroupCondition)       RadioGroup radioConditionGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
-
         setContentView(R.layout.activity_form);
+        ButterKnife.inject(this);
 
         Intent intent = getIntent();
         final String id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ITEM_ID);
         String title = intent.getStringExtra(Constants.EXTRA_MESSAGE_TITLE);
         Double price = intent.getDoubleExtra(Constants.EXTRA_MESSAGE_PRICE, 0.0);
+        String currency = intent.getStringExtra(Constants.EXTRA_MESSAGE_CURRENCY);
         String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);
 
-        final EditText textItem = (EditText)findViewById(R.id.editTextItem);
-        final EditText textPrice = (EditText)findViewById(R.id.editTextPrice);
-        final Spinner spinnerCurrency = (Spinner)findViewById(R.id.spinnerCurrency);
-        final EditText textDescription = (EditText)findViewById(R.id.editTextDescription);
+        editTextItem.setText(title);
+        editTextPrice.setText(price.toString());
+        editTextDescription.setText(description);
 
-        textItem.setText(title);
-        textPrice.setText(price.toString());
-        textDescription.setText(description);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.currency_arrays, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+        spinnerCurrency.setAdapter(adapter);
 
-        Button submitFormButton = (Button) findViewById(R.id.button);
+        final String[] currency_arrays = getResources().getStringArray(R.array.currency_arrays);
+        List<String> currency_arraysList = Arrays.asList(currency_arrays);
+
+        if (currency != null) {
+            int position = currency_arraysList.indexOf(currency);
+            if (position != -1) spinnerCurrency.setSelection(position);
+            Log.d(Constants.MESSAGE_TAG, "Currency: " + currency);
+            Log.d(Constants.MESSAGE_TAG, "Currency position: " + position);
+        } else {
+            SharedPreferences sharedPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(this);
+            String defaultCurrency = sharedPrefs.getString("defaultCurrency", "NONE");
+            Log.d(Constants.MESSAGE_TAG, "Default currency: " + defaultCurrency);
+
+            int position = currency_arraysList.indexOf(defaultCurrency);
+            if (position != -1) spinnerCurrency.setSelection(position);
+            Log.d(Constants.MESSAGE_TAG, "Default currency position: " + position);
+        }
+
+        spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id)
+            {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("defaultCurrency", currency_arrays[position]);
+                editor.commit();
+
+                Log.d(Constants.EVENT_TAG, "Currency selected");
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
+                Log.d(Constants.EVENT_TAG, "Nothing selected");
+            }
+        });
+
         submitFormButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -57,16 +117,10 @@ public class FormActivity extends FragmentActivity {
 
                 String user = Utils.getMacAddress(getSystemService(Context.WIFI_SERVICE));
 
-                ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
-                RadioGroup radioConditionGroup = (RadioGroup) findViewById(R.id.radioGroupCondition);
                 int selectedId = radioConditionGroup.getCheckedRadioButtonId();
                 RadioButton radioConditionButton = (RadioButton) findViewById(selectedId);
 
-                EditText textEmailAddress = (EditText)findViewById(R.id.textEmailAddress);
-                EditText textPhone = (EditText)findViewById(R.id.textPhone);
-                EditText textPostalAddress = (EditText)findViewById(R.id.editTextDescription);
-
-                JsonObject json = new JsonObject();
+                final JsonObject json = new JsonObject();
 
                 if (id != "") {
                     json.addProperty("id", id);
@@ -74,10 +128,10 @@ public class FormActivity extends FragmentActivity {
 
                 json.addProperty("user", user);
 
-                json.addProperty("title", textItem.getText().toString());
-                json.addProperty("price", textPrice.getText().toString());
+                json.addProperty("title", editTextItem.getText().toString());
+                json.addProperty("price", editTextPrice.getText().toString());
                 json.addProperty("currency", spinnerCurrency.getSelectedItem().toString());
-                json.addProperty("description", textDescription.getText().toString());
+                json.addProperty("description", editTextDescription.getText().toString());
 
                 json.addProperty("second_hand", toggleButton.isChecked());
                 json.addProperty("condition", radioConditionButton.getText().toString());
@@ -100,13 +154,14 @@ public class FormActivity extends FragmentActivity {
                             public void onCompleted(Exception e, JsonObject result) {
                                 // do stuff with the result or error
                                 Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                                Log.i(Constants.HTTP_TAG, "Form sent: " + json.toString());
+                                // close the activity
                                 finish();
                             }
                         });
             }
         });
 
-        Button gpsButton = (Button) findViewById(R.id.button_gps);
         gpsButton.setOnClickListener( new View.OnClickListener() {
 
             @Override

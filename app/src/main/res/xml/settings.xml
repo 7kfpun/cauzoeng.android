@@ -17,6 +17,13 @@
         </CheckBoxPreference>
 
         <ListPreference
+            android:key="defaultCurrency"
+            android:entries="@array/currency_arrays"
+            android:summary="Default currency"
+            android:entryValues="@array/currency_arrays"
+            android:title="Default currency" />
+
+        <ListPreference
             android:key="prefSyncFrequency"
             android:entries="@array/syncFrequency"
             android:summary="@string/pref_sync_frequency_summary"

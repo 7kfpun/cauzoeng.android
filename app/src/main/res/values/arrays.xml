@@ -522,53 +522,52 @@
     </string-array>
 
     <string-array name="currency_arrays">
-        <item>AED</item>
-        <item>ARS</item>
-        <item>AUD</item>
-        <item>BMD</item>
-        <item>BRL</item>
-        <item>CAD</item>
-        <item>CHF</item>
-        <item>CLP</item>
-        <item>CNY</item>
-        <item>COP</item>
-        <item>CZK</item>
-        <item>DKK</item>
-        <item>EEK</item>
-        <item>EGP</item>
-        <item>EUR</item>
-        <item>GBP</item>
-        <item>HKD</item>
-        <item>HRK</item>
-        <item>HUF</item>
-        <item>IDR</item>
-        <item>ILS</item>
-        <item>INR</item>
-        <item>JMD</item>
-        <item>JPY</item>
-        <item>KRW</item>
-        <item>KZT</item>
-        <item>MXN</item>
-        <item>MYR</item>
-        <item>NOK</item>
-        <item>NZD</item>
-        <item>PEN</item>
-        <item>PHP</item>
-        <item>PLN</item>
-        <item>QAR</item>
-        <item>RON</item>
-        <item>RUB</item>
-        <item>SAR</item>
-        <item>SEK</item>
-        <item>SGD</item>
-        <item>THB</item>
-        <item>TRY</item>
-        <item>TTD</item>
-        <item>TWD</item>
-        <item>USD</item>
-        <item>VND</item>
-        <item>YDC</item>
-        <item>ZAR</item>
+        <item name="AED">AED</item>
+        <item name="ARS">ARS</item>
+        <item name="AUD">AUD</item>
+        <item name="BMD">BMD</item>
+        <item name="BRL">BRL</item>
+        <item name="CAD">CAD</item>
+        <item name="CHF">CHF</item>
+        <item name="CLP">CLP</item>
+        <item name="CNY">CNY</item>
+        <item name="COP">COP</item>
+        <item name="CZK">CZK</item>
+        <item name="DKK">DKK</item>
+        <item name="EGP">EGP</item>
+        <item name="EUR">EUR</item>
+        <item name="GBP">GBP</item>
+        <item name="HKD">HKD</item>
+        <item name="HRK">HRK</item>
+        <item name="HUF">HUF</item>
+        <item name="IDR">IDR</item>
+        <item name="ILS">ILS</item>
+        <item name="INR">INR</item>
+        <item name="JMD">JMD</item>
+        <item name="JPY">JPY</item>
+        <item name="KRW">KRW</item>
+        <item name="KZT">KZT</item>
+        <item name="MXN">MXN</item>
+        <item name="MYR">MYR</item>
+        <item name="NOK">NOK</item>
+        <item name="NZD">NZD</item>
+        <item name="PEN">PEN</item>
+        <item name="PHP">PHP</item>
+        <item name="PLN">PLN</item>
+        <item name="QAR">QAR</item>
+        <item name="RON">RON</item>
+        <item name="RUB">RUB</item>
+        <item name="SAR">SAR</item>
+        <item name="SEK">SEK</item>
+        <item name="SGD">SGD</item>
+        <item name="THB">THB</item>
+        <item name="TRY">TRY</item>
+        <item name="TTD">TTD</item>
+        <item name="TWD">TWD</item>
+        <item name="USD">USD</item>
+        <item name="VND">VND</item>
+        <item name="XBT">XBT</item>
+        <item name="ZAR">ZAR</item>
     </string-array>
 
 </resources>

@@ -10,16 +10,26 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 import com.koushikdutta.ion.Ion;
 
 
 public class DescriptionActivity extends FragmentActivity {
 
+    @InjectView(R.id.textTitle)         TextView titleTextView;
+    @InjectView(R.id.textPrice)         TextView priceTextView;
+    @InjectView(R.id.textCurrency)      TextView currencyTextView;
+    @InjectView(R.id.textDescription)   TextView descriptionTextView;
+    @InjectView(R.id.img)               ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getWindow().requestFeature(Window.FEATURE_PROGRESS);
+        setContentView(R.layout.description);
+        ButterKnife.inject(this);
 
         Intent intent = getIntent();
         String item_id = intent.getStringExtra(Constants.EXTRA_MESSAGE_ITEM_ID);
@@ -29,18 +39,12 @@ public class DescriptionActivity extends FragmentActivity {
         String description = intent.getStringExtra(Constants.EXTRA_MESSAGE_DESCRIPTION);
         Log.d("INTENT", "item_id: " + item_id + ", title: " + title);
 
-        setContentView(R.layout.description);
-        TextView titleTextView = (TextView) findViewById(R.id.textTitle);
         titleTextView.setText(title);
-        TextView priceTextView = (TextView) findViewById(R.id.textPrice);
         priceTextView.setText(price.toString());
-        TextView currencyTextView = (TextView) findViewById(R.id.textCurrency);
         currencyTextView.setText(currency);
-        TextView descriptionTextView = (TextView) findViewById(R.id.textDescription);
         descriptionTextView.setText(description);
 
         String imageUrl = "http://img.1ting.com/images/album/0706/s300_20066574366.jpg";
-        ImageView imageView = (ImageView) findViewById(R.id.img);
         Ion.with(imageView)
                 .placeholder(R.drawable.ic_launcher)
                 .load(imageUrl);

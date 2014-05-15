@@ -16,38 +16,29 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import com.cauzoeng.android.model.ItemListReader;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * MainActivity.
@@ -67,8 +58,6 @@ public class MainActivity extends FragmentActivity {
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-    String order = "date";
-    private static final int RESULT_SETTINGS = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +73,7 @@ public class MainActivity extends FragmentActivity {
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Enable global Ion logging
-        Ion.getDefault(this).configure().setLogging("ion-sample", Log.DEBUG);
+        Ion.getDefault(this).configure().setLogging(Constants.ION_TAG, Log.DEBUG);
 	}
 
 	@Override
@@ -155,16 +144,15 @@ public class MainActivity extends FragmentActivity {
         public HomeSectionFragment() {
 		}
 
+        @InjectView(R.id.list)         ListView list;
+
         private void renderList (View rootView) {
 
             // Notify swipeRefreshLayout that the refresh has started (used for non-swiping)
-            SwipeRefreshLayout swipe_refresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
             swipe_refresh.setRefreshing(true);
 
             SharedPreferences sharedPrefs = PreferenceManager
                     .getDefaultSharedPreferences(rootView.getContext());
-
-            final ListView list = (ListView) rootView.findViewById(R.id.list);
 
             String prefFilterOrder = sharedPrefs.getString("prefFilterOrder", "created_date");
             Log.d(Constants.EVENT_TAG, "prefFilterOrder" + prefFilterOrder);
@@ -217,15 +205,19 @@ public class MainActivity extends FragmentActivity {
             // Notify swipeRefreshLayout that the refresh has finished
             swipe_refresh.setRefreshing(false);
         }
+
+        @InjectView(R.id.swipe_refresh)         SwipeRefreshLayout swipe_refresh;
+        @InjectView(R.id.search_bar)            EditText search_bar;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_main_0_home, container, false);
+            ButterKnife.inject(this, rootView);
+
             renderList(rootView);
 
-            SwipeRefreshLayout swipe_refresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
             swipe_refresh.setColorScheme(R.color.blue, R.color.green, R.color.orange, R.color.purple);
-
             swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -234,7 +226,6 @@ public class MainActivity extends FragmentActivity {
                 }
             });
 
-            final EditText search_bar = (EditText) rootView.findViewById(R.id.search_bar);
             search_bar.setOnKeyListener(new View.OnKeyListener() {
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
                     // If the event is a key-down event on the "enter" button
@@ -393,5 +384,4 @@ public class MainActivity extends FragmentActivity {
 			return null;
 		}
 	}
-
 }

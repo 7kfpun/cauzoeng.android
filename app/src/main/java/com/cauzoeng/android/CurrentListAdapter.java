@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class CurrentListAdapter extends ArrayAdapter<String>{
     private final Activity context;
@@ -38,6 +41,7 @@ public class CurrentListAdapter extends ArrayAdapter<String>{
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.listview_current_item, null, true);
+
         TextView txtTitle = (TextView) rowView.findViewById(R.id.title);
         TextView txtPrice = (TextView) rowView.findViewById(R.id.price);
         TextView txtDescription = (TextView) rowView.findViewById(R.id.description);

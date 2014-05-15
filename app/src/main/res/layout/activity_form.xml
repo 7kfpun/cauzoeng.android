@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="Email"
-                android:id="@+id/textEmailAddress"
+                android:id="@+id/editTextEmailAddress"
                 android:visibility="gone" />
 
             <CheckBox
@@ -172,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:hint="Phone number"
-                android:id="@+id/textPhone"
+                android:id="@+id/editTextPhone"
                 android:visibility="gone" />
 
             <LinearLayout
