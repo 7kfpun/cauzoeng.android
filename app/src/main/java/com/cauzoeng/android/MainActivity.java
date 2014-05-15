@@ -30,16 +30,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cauzoeng.android.model.MyItem;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonObject;
 
+import com.google.maps.android.clustering.ClusterManager;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import com.cauzoeng.android.model.ItemListReader;
 
+import org.json.JSONException;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import java.io.InputStream;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -296,13 +306,49 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public MapSectionFragment() {
 		}
 
+        private GoogleMap mMap;
+
+        private void setUpMapIfNeeded() {
+            if (mMap != null) {
+                return;
+            }
+            mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+            if (mMap != null) {
+                startMap();
+            }
+        }
+
+        private ClusterManager<MyItem> mClusterManager;
+
+        protected void startMap() {
+            getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
+
+            mClusterManager = new ClusterManager<MyItem>(getActivity(), getMap());
+            getMap().setOnCameraChangeListener(mClusterManager);
+
+            try {
+                readItems();
+            } catch (JSONException e) {
+                Toast.makeText(getActivity(), "Problem reading list of markers.", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        private void readItems() throws JSONException {
+            InputStream inputStream = getResources().openRawResource(R.raw.radar_search);
+            List<MyItem> items = new MyItemReader().read(inputStream);
+            mClusterManager.addItems(items);
+        }
+
+        protected GoogleMap getMap() {
+            setUpMapIfNeeded();
+            return mMap;
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
-            TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-
-            dummyTextView.setText("Map view.");
+            final View rootView = inflater.inflate(R.layout.activity_map, container, false);
+            setUpMapIfNeeded();
 
             return rootView;
         }

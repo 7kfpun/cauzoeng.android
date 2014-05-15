@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 
 public class CurrentListAdapter extends ArrayAdapter<String>{
     private final Activity context;
