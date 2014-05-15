@@ -1,10 +1,16 @@
 package com.cauzoeng.android;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -29,9 +36,11 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
-
 
 public class FormActivity extends FragmentActivity {
 
@@ -47,6 +56,10 @@ public class FormActivity extends FragmentActivity {
 
     @InjectView(R.id.toggleButton)              ToggleButton toggleButton;
     @InjectView(R.id.radioGroupCondition)       RadioGroup radioConditionGroup;
+
+    @InjectView(R.id.imageButton0)              ImageButton imageButton0;
+    @InjectView(R.id.imageButton1)              ImageButton imageButton1;
+    @InjectView(R.id.imageButton2)              ImageButton imageButton2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +185,108 @@ public class FormActivity extends FragmentActivity {
                 textGps.setText("lat: " + lat_lon[0] + " lon: " + lat_lon[1]);
             }
         });
+
+        imageButton0.setOnClickListener(new View.OnClickListener() {
+            private final int REQUEST_CODE_CAMERA_IMAGE = 1000;
+            final CharSequence[] choice = {"Choose from Gallery","Capture a photo"};
+
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("Upload Photo")
+                        .setSingleChoiceItems(choice, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int position) {
+                                Log.d(Constants.MESSAGE_TAG, "Choose: " + position + choice[position]);
+                                if (choice[position] == "Choose from Gallery") {
+                                    selectPhoto();
+                                } else if (choice[position] == "Capture a photo") {
+                                    takePhoto();
+                                }
+                                dialog.dismiss();
+
+                            }
+                        })
+                        .setNegativeButton(R.string.str_cancel,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialoginterface, int i) {
+
+                                    }
+                                }
+                        )
+                        .show();
+            }
+        });
+    }
+
+    String path="";
+
+    private void selectPhoto () {
+        Intent intent = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, 1);
+    }
+
+    public void takePhoto() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File folder = new File(Environment.getExternalStorageDirectory() + "/LoadImg");
+
+        if(!folder.exists())
+        {
+            folder.mkdir();
+        }
+        final Calendar c = Calendar.getInstance();
+        String new_Date= c.get(Calendar.DAY_OF_MONTH)+"-"+((c.get(Calendar.MONTH))+1)   +"-"+c.get(Calendar.YEAR) +" " + c.get(Calendar.HOUR) + "-" + c.get(Calendar.MINUTE)+ "-"+ c.get(Calendar.SECOND);
+        path = String.format(Environment.getExternalStorageDirectory() +"/LoadImg/%s.png","LoadImg("+new_Date+")");
+        File photo = new File(path);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+        startActivityForResult(intent, 2);
+    }
+
+    ArrayList<String> image_list = new ArrayList<String>();
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1)
+        {
+            Uri photoUri = data.getData();
+            if (photoUri != null)
+            {
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(photoUri, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String filePath = cursor.getString(columnIndex);
+                cursor.close();
+                Log.d(Constants.IMAGE_TAG, "Gallery File Path=====>>>"+filePath);
+                image_list.add(filePath);
+                Log.d(Constants.IMAGE_TAG, "Image List Size=====>>>"+image_list.size());
+
+                updateImageButtons();
+                //new GetImages().execute();
+            }
+        }
+
+        if(requestCode == 2)
+        {
+            Log.d(Constants.IMAGE_TAG, "Camera File Path=====>>>"+path);
+            image_list.add(path);
+            Log.d(Constants.IMAGE_TAG, "Image List Size=====>>>"+image_list.size());
+
+            updateImageButtons();
+            //new GetImages().execute();
+        }
+    }
+
+    public void updateImageButtons () {
+        for (String image: image_list) {
+
+        }
     }
 
     @Override

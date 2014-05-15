@@ -36,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.gson.JsonObject;
 
 import com.google.maps.android.clustering.ClusterManager;
@@ -333,7 +334,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
             mClusterManager = new ClusterManager<MyItem>(getActivity(), getMap());
             getMap().setOnCameraChangeListener(mClusterManager);
-            getMap().setOnMarkerClickListener(mClusterManager);
+            getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    Log.d(Constants.EVENT_TAG, "Click marker: " + marker);
+                    return true;
+                }
+            });
 
             try {
                 readItems();

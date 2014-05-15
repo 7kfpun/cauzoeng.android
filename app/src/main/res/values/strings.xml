@@ -9,6 +9,7 @@
     <string name="app_about_title">Title</string>
     <string name="app_about_message">This is app about information</string>
     <string name="str_ok">OK</string>
+    <string name="str_cancel">Cancel</string>
     <string name="title_section1">Timeline</string>
     <string name="title_section2">Map view</string>
     <string name="title_section3">About</string>

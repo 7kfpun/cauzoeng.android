@@ -13,6 +13,7 @@ public class Constants {
     public static final String ION_TAG = "ION";
     public static final String FILE_TAG = "FILE";
     public static final String GPS_TAG = "GPS";
+    public static final String IMAGE_TAG = "IMAGE";
 
     // Message exchange between activities
     public static final String EXTRA_MESSAGE_ITEM_ID = "MESSAGE_ITEM_ID";
