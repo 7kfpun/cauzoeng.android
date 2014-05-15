@@ -104,7 +104,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // Enable global Ion logging
         Ion.getDefault(this).configure().setLogging(Constants.ION_TAG, Log.DEBUG);
 	}
-    
+
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in

@@ -1,27 +1,29 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_new_item"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_new_item"
         android:title="@string/action_new_item"/>
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_settings"/>
 
     <item
         android:id="@+id/action_map"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Map"/>
 
     <item
         android:id="@+id/action_about"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_about"/>
 
 </menu>
