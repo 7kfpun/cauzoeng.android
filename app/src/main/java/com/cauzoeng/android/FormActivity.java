@@ -49,6 +49,7 @@ import java.util.List;
 public class FormActivity extends FragmentActivity {
 
     @InjectView(R.id.button)                    Button submitFormButton;
+    @InjectView(R.id.buttonNew)                 Button buttonNew;
     @InjectView(R.id.editTextItem)              EditText editTextItem;
     @InjectView(R.id.editTextPrice)             EditText editTextPrice;
     @InjectView(R.id.spinnerCurrency)           Spinner spinnerCurrency;
@@ -191,41 +192,68 @@ public class FormActivity extends FragmentActivity {
             }
         });
 
-        for (ImageButton ib: imageButtons) {
-            ib.setOnClickListener(new View.OnClickListener() {
-                final CharSequence[] choice = {"Choose from Gallery","Capture a photo"};
+        buttonNew.setOnClickListener(new View.OnClickListener() {
+            final CharSequence[] choice = {"Choose from Gallery","Capture a photo"};
 
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("Upload Photo")
+                        .setSingleChoiceItems(choice, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int position) {
+                                Log.d(Constants.MESSAGE_TAG, "Choose: " + position + choice[position]);
+                                if (choice[position] == "Choose from Gallery") {
+                                    selectPhoto();
+                                } else if (choice[position] == "Capture a photo") {
+                                    takePhoto();
+                                }
+                                dialog.dismiss();
+
+                            }
+                        })
+                        .setNegativeButton(R.string.str_cancel,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialoginterface, int i) {
+
+                                    }
+                                }
+                        )
+                        .show();
+            }
+        });
+
+        for (final ImageButton imageButton: imageButtons) {
+            imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AlertDialog.Builder(v.getContext())
-                            .setTitle("Upload Photo")
-                            .setSingleChoiceItems(choice, -1, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int position) {
-                                    Log.d(Constants.MESSAGE_TAG, "Choose: " + position + choice[position]);
-                                    if (choice[position] == "Choose from Gallery") {
-                                        selectPhoto();
-                                    } else if (choice[position] == "Capture a photo") {
-                                        takePhoto();
-                                    }
-                                    dialog.dismiss();
 
-                                }
-                            })
-                            .setNegativeButton(R.string.str_cancel,
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialoginterface, int i) {
-
+                    if ( imageButton.getDrawable() != null ) {
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle("Remove?")
+                                .setPositiveButton(R.string.str_ok,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialoginterface, int i) {
+                                                Log.d(Constants.EVENT_TAG, "Click delete true.");
+                                                imageButton.setImageDrawable(null);
+                                            }
                                         }
-                                    }
-                            )
-                            .show();
+                                )
+                                .setNegativeButton(R.string.str_cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialoginterface, int i) {
+                                                Log.d(Constants.EVENT_TAG, "Click delete false.");
+                                            }
+                                        }
+                                )
+                                .show();
+                    }
                 }
             });
         }
     }
 
-    String path="";
+    String path = "";
 
     private void selectPhoto () {
         Intent intent = new Intent(
@@ -303,29 +331,6 @@ public class FormActivity extends FragmentActivity {
                 int width = 80;
                 Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, width, height, true);
                 imageButtons.get(count).setImageBitmap(scaled);
-                imageButtons.get(count).setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        new AlertDialog.Builder(v.getContext())
-                                .setTitle("Remove?")
-                                .setPositiveButton(R.string.str_ok,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialoginterface, int i) {
-                                                // imageButtons.get(count).setImageDrawable(null);
-                                            }
-                                        }
-                                )
-                                .setNegativeButton(R.string.str_cancel,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialoginterface, int i) {
-
-                                            }
-                                        }
-                                )
-                                .show();
-                    }
-                });
             }
             count++;
         }
