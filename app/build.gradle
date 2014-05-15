@@ -7,6 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
     }
 
     buildTypes {
@@ -31,11 +33,12 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.+'
+    // compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:19.+'
-    compile 'com.google.android.gms:play-services:4.3.+'
-    compile 'com.koushikdutta.ion:ion:1.2.+'
+    compile 'com.android.support:support-v4:19.+'
     compile 'com.androidmapsextensions:android-maps-extensions:2.1.+'
+    compile 'com.google.android.gms:play-services:4.3.+'
     compile 'com.google.maps.android:android-maps-utils:0.3.+'
     compile 'com.jakewharton:butterknife:5.0.1'
+    compile 'com.koushikdutta.ion:ion:1.2.+'
 }
