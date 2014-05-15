@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -31,6 +34,7 @@ import android.widget.ToggleButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.InjectViews;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -57,9 +61,10 @@ public class FormActivity extends FragmentActivity {
     @InjectView(R.id.toggleButton)              ToggleButton toggleButton;
     @InjectView(R.id.radioGroupCondition)       RadioGroup radioConditionGroup;
 
-    @InjectView(R.id.imageButton0)              ImageButton imageButton0;
+    /*@InjectView(R.id.imageButton0)              ImageButton imageButton0;
     @InjectView(R.id.imageButton1)              ImageButton imageButton1;
-    @InjectView(R.id.imageButton2)              ImageButton imageButton2;
+    @InjectView(R.id.imageButton2)              ImageButton imageButton2;*/
+    @InjectViews({ R.id.imageButton0, R.id.imageButton1, R.id.imageButton2 })   List<ImageButton> imageButtons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,37 +191,38 @@ public class FormActivity extends FragmentActivity {
             }
         });
 
-        imageButton0.setOnClickListener(new View.OnClickListener() {
-            private final int REQUEST_CODE_CAMERA_IMAGE = 1000;
-            final CharSequence[] choice = {"Choose from Gallery","Capture a photo"};
+        for (ImageButton ib: imageButtons) {
+            ib.setOnClickListener(new View.OnClickListener() {
+                final CharSequence[] choice = {"Choose from Gallery","Capture a photo"};
 
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(v.getContext())
-                        .setTitle("Upload Photo")
-                        .setSingleChoiceItems(choice, -1, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int position) {
-                                Log.d(Constants.MESSAGE_TAG, "Choose: " + position + choice[position]);
-                                if (choice[position] == "Choose from Gallery") {
-                                    selectPhoto();
-                                } else if (choice[position] == "Capture a photo") {
-                                    takePhoto();
-                                }
-                                dialog.dismiss();
-
-                            }
-                        })
-                        .setNegativeButton(R.string.str_cancel,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialoginterface, int i) {
-
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("Upload Photo")
+                            .setSingleChoiceItems(choice, -1, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int position) {
+                                    Log.d(Constants.MESSAGE_TAG, "Choose: " + position + choice[position]);
+                                    if (choice[position] == "Choose from Gallery") {
+                                        selectPhoto();
+                                    } else if (choice[position] == "Capture a photo") {
+                                        takePhoto();
                                     }
+                                    dialog.dismiss();
+
                                 }
-                        )
-                        .show();
-            }
-        });
+                            })
+                            .setNegativeButton(R.string.str_cancel,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialoginterface, int i) {
+
+                                        }
+                                    }
+                            )
+                            .show();
+                }
+            });
+        }
     }
 
     String path="";
@@ -254,38 +260,74 @@ public class FormActivity extends FragmentActivity {
 
         if(requestCode == 1)
         {
-            Uri photoUri = data.getData();
-            if (photoUri != null)
-            {
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = getContentResolver().query(photoUri, filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String filePath = cursor.getString(columnIndex);
-                cursor.close();
-                Log.d(Constants.IMAGE_TAG, "Gallery File Path=====>>>"+filePath);
-                image_list.add(filePath);
-                Log.d(Constants.IMAGE_TAG, "Image List Size=====>>>"+image_list.size());
+            if (data != null) {
+                Uri photoUri = data.getData();
+                if (photoUri != null) {
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContentResolver().query(photoUri, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String filePath = cursor.getString(columnIndex);
+                    cursor.close();
+                    Log.d(Constants.IMAGE_TAG, "Gallery File Path=====>>>" + filePath);
+                    image_list.add(filePath);
+                    Log.d(Constants.IMAGE_TAG, "Image List Size=====>>>" + image_list.size());
 
-                updateImageButtons();
-                //new GetImages().execute();
+                    updateImageButtons();
+                    //new GetImages().execute();
+                }
             }
         }
 
         if(requestCode == 2)
         {
-            Log.d(Constants.IMAGE_TAG, "Camera File Path=====>>>"+path);
+            Log.d(Constants.IMAGE_TAG, "Camera File Path=====>>>" + path);
             image_list.add(path);
-            Log.d(Constants.IMAGE_TAG, "Image List Size=====>>>"+image_list.size());
+            Log.d(Constants.IMAGE_TAG, "Image List Size=====>>>" + image_list.size());
 
             updateImageButtons();
             //new GetImages().execute();
         }
     }
 
-    public void updateImageButtons () {
-        for (String image: image_list) {
+    int count;
 
+    public void updateImageButtons () {
+
+        count = 0;
+        for (String image: image_list) {
+            File imgFile = new  File(image);
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                int height = 100;
+                int width = 80;
+                Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, width, height, true);
+                imageButtons.get(count).setImageBitmap(scaled);
+                imageButtons.get(count).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle("Remove?")
+                                .setPositiveButton(R.string.str_ok,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialoginterface, int i) {
+                                                // imageButtons.get(count).setImageDrawable(null);
+                                            }
+                                        }
+                                )
+                                .setNegativeButton(R.string.str_cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialoginterface, int i) {
+
+                                            }
+                                        }
+                                )
+                                .show();
+                    }
+                });
+            }
+            count++;
         }
     }
 
