@@ -34,6 +34,7 @@ import com.cauzoeng.android.model.MyItem;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonObject;
 
@@ -313,6 +314,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 return;
             }
             mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+            /*mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                @Override
+                public void onCameraChange(CameraPosition position) {
+                    Log.d(Constants.EVENT_TAG, "New position: " + position);
+                }
+            });*/
+
             if (mMap != null) {
                 startMap();
             }
@@ -325,6 +333,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
             mClusterManager = new ClusterManager<MyItem>(getActivity(), getMap());
             getMap().setOnCameraChangeListener(mClusterManager);
+            getMap().setOnMarkerClickListener(mClusterManager);
 
             try {
                 readItems();
